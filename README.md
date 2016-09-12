@@ -1,2 +1,5 @@
 # ICU
-ICU: (I see you) home security application.  Includes source code for raspberry pi, API, server, and front end.
+###I see you 
+
+Home security application.  Includes source code for raspberry pi, API, server, and front end.
+
