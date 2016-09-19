@@ -9,8 +9,10 @@ Home security application.  Includes source code for raspberry pi, API, server, 
   
   > vagrant up
 3. Make sure you can ssh into the vagrant box:
+  
   > vagrant ssh
 4. Make sure apache is running and you can see the box in your network:
-  > Go to `http://127.0.0.1:4567/` in your browser
+  
+  > Go to [http://127.0.0.1:4567/](http://127.0.0.1:4567/) in your browser
 
 `vagrant up` should be sufficient to get your dev env up and running. The Vagrantfile defines all of the settings for the box when it is spun up. Notice at the bottom of the vagrant file the line `config.vm.provision :shell, path: "bootstrap.sh"`.  This tells the box to run the `bootstrap.sh` script once the box is spun up.  If you need something to be automatically installed, add the commands in the bootstrap.sh file, and of course push up to master so we can all see the new dev env changes you've made :).
