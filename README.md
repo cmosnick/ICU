@@ -12,8 +12,8 @@ Home security application.  Includes source code for raspberry pi, API, server, 
 > vagrant ssh
 
 4. Make sure apache is running and you can see the box in your network:
-  
 > Go to [http://127.0.0.1:4567/](http://127.0.0.1:4567/) in your browser
+
 5. All files in the ICU repo will be synced with the vagrant machine, and stored under the `/vagrant` folder.  So if you make a change to this readme outside of the box (in the repo directory on your machine), and ssh in, you will see the change there in `/vagrant/README.md`.  The same is true the other way around.
 
 `vagrant up` should be sufficient to get your development environment up and running. The Vagrantfile defines all of the settings for the box when it is spun up. Notice at the bottom of the vagrant file the line `config.vm.provision :shell, path: "bootstrap.sh"`.  This tells the box to run the `bootstrap.sh` script once the box is spun up, and installs what we want it to.  If you need something to be automatically installed on spin up, add the commands in the bootstrap.sh file, and of course push up to master so we can all see the new dev env changes you've made :).
