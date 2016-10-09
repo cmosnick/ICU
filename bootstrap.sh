@@ -15,4 +15,10 @@ cd /vagrant/api
 pip install Flask-API
 chmod a+x app.py
 python app.py &
+cd ~
+
+
+# Setup database
+sudo apt-get install mysql-client-core-5.5
+
 
