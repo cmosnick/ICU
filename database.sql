@@ -9,6 +9,7 @@
 	all the foreign keys every time.
 */
 delimiter $$
+DROP procedure IF EXISTS drop_keys;$$
 create procedure drop_keys()
 begin
 
