@@ -19,6 +19,16 @@ cd ~
 
 
 # Setup database
-sudo apt-get install mysql-client-core-5.5
+# sudo apt-get -y install mysql-client-core-5.5
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password pass"
+sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password pass"
+sudo apt-get -y -f install mysql-server
+echo "\n\nCREATING DATABASE\n\n____________________________________\n"
+mysql -uroot -ppass -e "CREATE DATABASE capstone_icu;"
+mysql -uroot -ppass -e "use capstone_icu;"
+mysql -uroot -ppass -D "capstone_icu"< "/vagrant/database.sql"
 
 
+#  Install node
+# sudo apt-get -y install nodejs
+# sudo apt-get -y install npm

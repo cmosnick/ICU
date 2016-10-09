@@ -8,13 +8,29 @@
 	the database from scratch everytime we run this script, we are deleting
 	all the foreign keys every time.
 */
-ALTER TABLE user_settings DROP FOREIGN KEY user_settings_ibfk_1;
-ALTER TABLE user_settings DROP FOREIGN KEY user_settings_ibfk_2;
-ALTER TABLE log DROP FOREIGN KEY log_ibfk_1;
-ALTER TABLE images DROP FOREIGN KEY images_ibfk_1;
-ALTER TABLE sent_images DROP FOREIGN KEY sent_images_ibfk_1;
-ALTER TABLE sent_images DROP FOREIGN KEY sent_images_ibfk_2;
+delimiter $$
+create procedure drop_keys()
+begin
 
+IF EXISTS( SELECT table_name 
+  FROM INFORMATION_SCHEMA.TABLES
+  WHERE (table_name LIKE 'user_settings' 
+    or table_name LIKE 'log' 
+    or table_name LIKE 'images' 
+    or table_name LIKE 'sent_images')
+  and table_schema LIKE 'capstone_icu')
+THEN
+  ALTER TABLE user_settings DROP FOREIGN KEY user_settings_ibfk_1;
+  ALTER TABLE user_settings DROP FOREIGN KEY user_settings_ibfk_2;
+  ALTER TABLE log DROP FOREIGN KEY log_ibfk_1;
+  ALTER TABLE images DROP FOREIGN KEY images_ibfk_1;
+  ALTER TABLE sent_images DROP FOREIGN KEY sent_images_ibfk_1;
+  ALTER TABLE sent_images DROP FOREIGN KEY sent_images_ibfk_2;
+END IF;
+
+end $$
+
+call drop_keys();
 /*
   The table "users" will contain all the users for the security system
 
