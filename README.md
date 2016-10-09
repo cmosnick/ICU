@@ -34,5 +34,5 @@ This command is the same as you would enter manually if you were ssh'd into the 
 * `vagrant reload --provision` restarts the box and re-runs the bootstrap.sh file, because it is set as the provisioning file
 * `vagrant ssh` allows you to ssh into the box and work inside of it
 
-####To run database.sql:
+###To run database.sql:
 In MySQL, navigate to the Capstone's database ("use capstone_icu") and run the command "source database.sql"
