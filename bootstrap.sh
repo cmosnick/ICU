@@ -19,7 +19,6 @@ cd ~
 
 
 # Setup database
-# sudo apt-get -y install mysql-client-core-5.5
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password pass"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password pass"
 sudo apt-get -y -f install mysql-server
@@ -30,5 +29,8 @@ mysql -uroot -ppass -D "capstone_icu"< "/vagrant/database.sql"
 
 
 #  Install node
-# sudo apt-get -y install nodejs
-# sudo apt-get -y install npm
+sudo apt-get -y install curl
+curl -sL https://deb.nodesource.com/setup | sudo bash -
+sudo apt-get -y install nodejs
+sudo npm update
+
