@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS images CASCADE;
 CREATE TABLE images (
   image_id INTEGER AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
-  image LONGBLOB NOT NULL,
+  image VARCHAR(200) NOT NULL,
   date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   PRIMARY KEY(image_id)
@@ -145,10 +145,10 @@ CREATE TABLE sent_images (
 /*
   Creates indexes on the tables in the database
 
-	Creates four indexes on the user_id field for both tables log and images.
+	Creates four indexes on the user_id field for tables log, sent_images, user_settings, and images.
 	This is done because most queries will have user_id in the search criteria,
 	and since these fields are not in the primary key/not the first field in the
-	primary key in any of these tables, we need to create and index for quick
+	primary key in any of these tables, we need to create an index for quick
 	retrieval.
 */
 CREATE INDEX user_id_log_idx ON log(user_id);
