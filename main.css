@@ -1,0 +1,382 @@
+.Header{
+    position: fixed;
+    width:100%;
+}
+.GrayBar{
+    width:100%;
+    height: 40px;
+    background:#414042;
+    box-sizing: border-box;
+    padding:10px 10px;
+}
+body{
+    margin:0;
+    padding:0;
+}
+.PhonNum{
+    font-family: open sans, sans-serif;
+    font-size: 10px;
+    color:#BCBEC0;
+    box-sizing: border-box;
+    display: inline-block;
+    margin-right:10px;
+    border-right: 1px solid #BCBEC0;
+    padding-right: 10px;
+}
+.LogIn{
+    font-family: open sans, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-align: center;
+    height: 20px;
+    width: auto;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    border:1px solid #EF9F48;
+    color:#EF9F48;
+    display: inline-block;
+    line-height: 10px;
+    vertical-align: middle;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.SignUp{
+    font-family: open sans, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-align: center;
+    height: 20px;
+    width: auto;
+    box-sizing: border-box;
+    padding: 5px 10px;
+    border:1px solid #5CBB50;
+    color:#5CBB50;
+    display: inline-block;
+    margin-right: 10px;
+    line-height: 10px;
+    vertical-align: middle;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.GrayBarContents{
+    height: auto;
+    float: right;
+}
+.Logo{
+    width:76px;
+    height: 76px;
+    background:url(../images/Logo.png)no-repeat;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+    top: -34px;
+}
+.WhiteBar{
+    box-sizing: border-box;
+    width:100%;
+    height: 60px;
+    padding: 10px;
+    background:white;
+    position: relative;
+}
+.NavUL{
+    display: inline-block;
+    height: 20px;
+    padding:0px !important;
+    vertical-align: top;
+    margin-top:8px;
+}
+.NavTab{
+    display: inline-block;
+    color: #5CBB50;
+    font-family: open sans,sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-right: 20px;
+    height: 20px;
+    border-bottom:1px solid #BCBEC0;
+    text-align: center;
+    padding: 0px 5px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.NavTab:hover{
+    color:#EF9F48;
+    cursor: pointer;
+    cursor: pointer;
+}
+.FirstSection{
+    background:url("../images/happyneighborhood..jpg") no-repeat;
+    background-size: cover;
+    background-position: top;
+    height: auto;
+    min-height: calc(100vh - 40px);
+    padding-top:100px;
+    padding-bottom: 30px;
+}
+.SignUpSection{
+    background:url("../images/happyneighborhood..jpg") no-repeat;
+    background-size: cover;
+    background-position: top;
+    height: auto;
+    min-height: calc(100vh - 40px);
+    padding-top:100px;
+    padding-bottom: 30px;
+}
+.IntroHeading{
+    font-family: open sans, sans-serif;
+    font-size: 45px;
+    color:#414042;
+    text-shadow: 2px 2px 4px gray;
+    text-align: center;
+    margin-top:40px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.IntroSlogan, .ReviewHeading{
+    color:#5CBB50;
+    font-size: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    font-family: open sans, sans-serif;
+    margin-top: 0px;
+    font-weight: 500;
+    text-shadow: 1px 1px 4px lightgray;
+}
+.ReviewHeading
+.MarketingContainer{
+    width:100%;
+    max-width:1024px;
+    margin: 0 auto;
+}
+.Marketing{
+    width:calc(100% / 3 - 10px);
+    box-sizing: border-box;
+    padding: 20px 10px;
+    border:1px solid #5CBB50;
+    border-radius: 5px;
+    margin-right: 10px;
+    display: inline-block;
+    background:rgba(255, 255, 255, 0.5);
+    vertical-align: top;
+    min-width: 250px;
+}
+.Marketing:last-of-type{
+    margin-right: 0px;
+}
+.MarketingPic{
+    height: 80px;
+    width:80px;
+    margin-bottom: 10px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+.MarketingHeading{
+    font-family: open sans,sans-serif;
+    color:#5CBB50;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+.MarketingContent{
+    font-family: open sans,sans-serif;
+    font-size: 12px;
+    color:#414042;
+    text-align: center;
+}
+.MarketingContainer{
+    width:100%;
+    max-width: 900px;
+    margin: auto;
+}
+.Pic1{
+    background:url(../images/MarketingPic1.png)no-repeat
+}
+.Pic2{
+    background:url(../images/MarketingPic2.png)no-repeat;
+}
+.Pic3{
+    background:url(../images/MarketingPic3.png)no-repeat;
+}
+.SecondSection{
+    width:100%;
+    height: 200px;
+    background:#414042;
+    box-sizing: border-box;
+    padding: 20px;
+}
+.FiveStar{
+    color:white;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 600;
+    font-family: open sans,sans-serif;
+    margin:10px 0px;
+    text-transform: uppercase;
+}
+.FiveStarImage{
+    background:url("../images/5star.png")no-repeat;
+    width:290px;
+    height: 50px;
+    margin: auto;
+}
+.ThirdSection{
+    background:white;
+    height: auto;
+    width:100%;
+    box-sizing: border-box;
+    min-height: 300px;
+    padding:30px 10px;
+}
+.ReviewContent{
+    font-family: open sans,sans-serif;
+    font-size: 14px;
+    color:#414042;
+    text-align: center;
+    max-width: 800px;
+    margin: auto;
+}
+.ReviewName{
+    font-family: open sans,sans-serif;
+    color:#414042;
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    margin:15px auto;
+    position: relative;
+    width:200px;
+}
+.ReviewName:before{
+    content:"";
+    width:20px;
+    height: 1px;
+    background:#414042;
+    position: absolute;
+    top:10px;
+    left: 10px;
+}
+.ReviewName:after{
+    content:"";
+    width:20px;
+    height: 1px;
+    background:#414042;
+    position: absolute;
+    top:10px;
+    right: 10px;
+}
+footer{
+    background:#BCBEC0;
+    width:100%;
+    height: auto;
+    min-height: 100px;
+}
+.SignUpContainer{
+    width:100%;
+    height: auto;
+    box-sizing: border-box;
+    background:white;
+    max-width: 900px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: auto;
+    margin-top: 20px;
+}
+.SignUpHeadingContainer{
+    height: 50px;
+    width:100%;
+    background:#BCBEC0;
+    box-sizing: border-box;
+    padding: 5px;
+}
+.PackageOption{
+    color: white;
+    font-family: open sans,sans-serif;
+    font-size: 15px;
+    margin-left: 20px;
+    margin-top: 8px;
+}
+.SignUpContentContainer{
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+    padding: 20px;
+}
+.TextboxLableContainer3{
+    box-sizing: border-box;
+    width:calc(100% / 3 - 13px);
+    display: inline-block;
+    margin: 0px 5px;
+    margin-bottom: 10px;
+}
+.TextboxLableContainer1{
+    box-sizing: border-box;
+    width:calc(100% - 13px);
+    display: inline-block;
+    margin: 0px 5px;
+    margin-bottom: 10px;
+}
+.TextboxLableContainer3 label{
+    font-family: open sans, sans-serif;
+    color:#414042;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.TextboxLableContainer1 label{
+    font-family: open sans, sans-serif;
+    color:#414042;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.textbox{
+    border:1px solid #BCBEC0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    height: 30px;
+    color:#414042;
+    font-family: open sans, sans-serif;
+    font-size: 14px;
+}
+.BillingH4{
+    font-family: open sans, sans-serif;
+    color:#5CBB50;
+    display: block;
+    margin: 10px 5px;
+    font-size: 18px;
+    font-weight: 300;
+}
+.SubmitBtn{
+    width:calc(100% - 13px);
+    height: 50px;
+    box-sizing: border-box;
+    padding: 10px;
+    border:1px solid #5CBB50;
+    color: #5CBB50;
+    font-family: open sans,sans-serif;
+    text-transform: uppercase;
+    text-align:center;
+    font-size: 18px;
+    background:transparent;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: .5s;
+    margin-top:10px;
+}
+.SubmitBtn:hover{
+    background:#5CBB50;
+    color:white;
+    transition: .5s;
+}
+@media (max-width: 800px) {
+    .Marketing{
+        width:80%;
+        min-width:300px;
+        display: block;
+        margin: 10px auto;
+    }
+    .Marketing:last-of-type{
+        margin: 10px auto;
+    }
+}
