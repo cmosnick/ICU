@@ -13,6 +13,7 @@ apache2ctl start
 printf "Y" | sudo apt-get install python-pip
 cd /vagrant/api
 pip install Flask-API
+pip install flask_sqlalchemy
 chmod a+x app.py
 python app.py &
 cd ~
