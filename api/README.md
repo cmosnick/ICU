@@ -9,6 +9,7 @@
 
 
 ##User Routes
+
 * __/user/id/\<int:user_id\>__
   * GET user info by user_id
 * __/user/device/\<int:device_id\>__
@@ -89,6 +90,7 @@
     * email
     
   Example POST request body:
+  
   ```
 {
   "device_id" = "0001",
@@ -99,12 +101,13 @@
   "email" = "cmosnick07@gmail.com",
   "phone_number" = "8159751442"
 }
-```
+ ```
 
 
 
 
 ##Image Routes
+
 * __/image/info/id/\<int:image_id\>__
  * GET image info (metadata, not actual image) by image id
  
@@ -115,9 +118,9 @@
   "image": "46b4fe09-b0c9-4f8e-aec1-c0c133180024.jpg", 
   "image_id": 2, 
   "user_id": 2
-}
+ }
  ```
- 
+
 * __/image/info/user/id/\<int:user_id\>__
  * GET image ids for a user by user_id
 * __/image/info/user/\<username\>__
@@ -145,7 +148,6 @@
   }
 ]
  ```
-
 
 * __/image/add/\<int:device_id\>__
  * POST image to database
