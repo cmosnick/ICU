@@ -1,7 +1,9 @@
 #utility.py
+from config import ALLOWED_EXTENSIONS
 
-def get_db():
-    
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-    
-    return "hello!";
+
+# TODO: function to generate a unique filename

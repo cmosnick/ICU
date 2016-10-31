@@ -28,7 +28,11 @@ sudo apt-get -y -f install mysql-server
 mysql -uroot -ppass -e "CREATE DATABASE capstone_icu;"
 mysql -uroot -ppass -e "use capstone_icu;"
 mysql -uroot -ppass -D "capstone_icu" < "/vagrant/database.sql"
-
+sudo pip install names
+# Make directory for files
+mkdir /database/
+mkdir /database/images
+sudo chmod 771 /database/images
 
 #  Install node
 sudo apt-get -y install curl
