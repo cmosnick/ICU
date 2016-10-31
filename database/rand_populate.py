@@ -2,7 +2,7 @@ import subprocess
 import random
 import requests
 
-NUM_USERS = 10
+NUM_USERS = 1000
 NUM_IMAGES = NUM_USERS * 10
 
 
@@ -30,18 +30,7 @@ def compose_user(device_id = None):
     phone = "".join( (str(x) for x in random.sample(xrange(10), 10)) )
     email = firstname + "." + lastname + "@test.com"
 
-    # # Send to api for insert
-    # url = "http://localhost:5000/user/add/"
-    # data = {
-    #     "first_name" : firstname,
-    #     "last_name" : lastname,
-    #     "device_id" : device_id,
-    #     "username" : username,
-    #     "password" : password,
-    #     "phone_number" : phone,
-    #     "email" : email
-    # }
-
+    # insert into database
     sql = "\"INSERT INTO users value (DEFAULT, "+ str(device_id) + ", \'"+firstname+"\', \'" + lastname +"\', \'" + username + "\', \'" + password + "\', \'" + phone + "\', \'" + email + "\');\""
     send_mysql(sql)
     print device_id;
@@ -67,9 +56,10 @@ def create_image():
         filename = "squirrel.jpg"
     else:
         filename = "victor-surge-e569f5dc-0425-4d09-a45b-0edd9b0d9478.jpg"
+    # Insert into database
     sql = "\"INSERT INTO images value (DEFAULT, "+ str(user_id) +", '"+ filename +"', DEFAULT)\""
     send_mysql(sql)
 
 if __name__ == '__main__':
-    # create_users()
+    create_users()
     create_images()

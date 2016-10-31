@@ -116,7 +116,7 @@ def add_user():
                 "username" : username,
                 "password" : password,
                 "phone_number" : phone_number,
-                "email" : email        
+                "email" : email      
             })
 
         except Exception as e:
@@ -198,7 +198,7 @@ def get_image(image_id = None):
 def get_image_info(image_id = None):
     try:
         if image_id is not None:
-            sqlImageInfo = query.get_image(image_id)
+            sqlImageInfo = query.get_image_info(image_id)
             if sqlImageInfo is not None:
                 imageInfo = Image(sqlImageInfo)
                 return imageInfo.to_json()
@@ -235,6 +235,8 @@ def get_images_by_user(user_id = None, username = None):
 ################
 # UPLOAD IMAGE #
 ################
+
+# Add image to database
 @app.route('/image/add/', methods=['POST'])
 @app.route('/image/add/<int:device_id>', methods=['POST'])
 def upload_file(device_id = None):
@@ -273,17 +275,18 @@ def upload_file(device_id = None):
             return error_message("Specify device id corresponding to image")
 
 
-# TODO: route to retrieve image(s) by filename. Receive filename or json array of filenames?
-@app.route('/image/get/', methods=['POST'])
-@app.route('/image/get/<path:filename>', methods=['GET', 'POST'])
-def download(filename=None):
+# Route to retrieve image(s) by id. Can receive filename or json array of filenames
+@app.route('/image/file/', methods=['POST'])
+@app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
+def download(image_id=None):
     try:
-        if ((filename is None) and (request.method == 'POST')):
+        if ((image_id is None) and (request.method == 'POST')):
             return "Thanks for posting"
-        elif filename is not None:
-            return filename
+        elif image_id is not None:
+            # check if filename exists
+            return image_id
         else:
-            return error_message("Please include fielnme or post array of filenames")
+            return error_message("Please include image_id or post array of image_ids")
     except Exception as e:
         return internal_error(e)
 
