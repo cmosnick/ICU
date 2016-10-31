@@ -10,11 +10,11 @@
 
 ##User Routes
 * __/user/id/\<int:user_id\>__
-  * Get user info by user_id
+  * GET user info by user_id
 * __/user/device/\<int:device_id\>__
-  * Get user info by device id
+  * GET user info by device id
 * __/user/\<username\>__
-  * Get user info by username
+  * GET user info by username
   ```
 {
   "device_id": 0, 
@@ -30,7 +30,7 @@
 
 
 * __/users/all/__
-  * Get all users (sanity check)
+  * GET all users (sanity check)
   ```
 [
   {
@@ -105,3 +105,53 @@
 
 
 ##Image Routes
+* __/image/info/id/\<int:image_id\>__
+ * GET image info (metadata, not actual image) by image id
+ 
+ _http://localhost:5000/image/info/id/2_ :
+ ```
+ {
+  "date_time": "Mon, 31 Oct 2016 16:36:46 GMT", 
+  "image": "46b4fe09-b0c9-4f8e-aec1-c0c133180024.jpg", 
+  "image_id": 2, 
+  "user_id": 2
+}
+ ```
+ 
+* __/image/info/user/id/\<int:user_id\>__
+ * GET image ids for a user by user_id
+* __/image/info/user/\<username\>__
+ * GET image ids for a user by username
+
+ _http://localhost:5000/image/info/user/id/2_ :
+ ```
+ [{
+    "date_time": "Mon, 31 Oct 2016 16:46:27 GMT", 
+    "image": "17980316-0b5b-46f2-9ca6-91ee1f2aa677.png", 
+    "image_id": 5, 
+    "user_id": 2
+  }, 
+  {
+    "date_time": "Mon, 31 Oct 2016 17:37:59 GMT", 
+    "image": "Mario_png.png", 
+    "image_id": 13, 
+    "user_id": 2
+  }, 
+  {
+    "date_time": "Mon, 31 Oct 2016 17:37:59 GMT", 
+    "image": "squirrel.jpg", 
+    "image_id": 20, 
+    "user_id": 2
+  }
+]
+ ```
+
+
+* __/image/add/\<int:device_id\>__
+ * POST image to database
+ * Request parameters:
+  * header:
+   * content-type: application/x-www-form-urlencoded
+  * body
+   * file : \<file\>
+ 
