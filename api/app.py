@@ -1,3 +1,4 @@
+# TODO: user authentication for any api endpoint use
 from flask import Flask, jsonify, request
 from utility import *
 from database import db
@@ -95,10 +96,11 @@ def get_all_users():
     except Exception as e:
         return internal_error(e)
 
-
+# Add a user
 @app.route('/user/add/', methods = ['POST'])
 def add_user():
     if request.method == 'POST':
+        # TODO: check all fields are in request before accessing request args
         try:
             first_name = request.args.get('first_name')
             last_name = request.args.get('last_name')
@@ -116,15 +118,6 @@ def add_user():
                 "phone_number" : phone_number,
                 "email" : email        
             })
-            # return query.add_user({
-            #     "first_name" : "Stina",
-            #     "last_name" : "Mosnick",
-            #     "device_id" : "1",
-            #     "username" : "cmosnick",
-            #     "password" : "pass",
-            #     "phone_number" : "8159751442",
-            #     "email" : "cmosnick07@gmail.com"        
-            # })
 
         except Exception as e:
             return internal_error(e)
@@ -157,6 +150,7 @@ def get_notification_options(not_id=None, username=None, user_id = None):
 
     except Exception as e:
         return internal_error(e)
+
 
 # get all notification options for all users
 @app.route('/notification_options/', methods = ['GET'])
@@ -277,6 +271,29 @@ def upload_file(device_id = None):
                 return error_message("Bad filename. Our bad.")
         else:
             return error_message("Specify device id corresponding to image")
+
+
+# TODO: route to retrieve image(s) by filename. Receive filename or json array of filenames?
+@app.route('/image/get/', methods=['POST'])
+@app.route('/image/get/<path:filename>', methods=['GET', 'POST'])
+def download(filename=None):
+    try:
+        if ((filename is None) and (request.method == 'POST')):
+            return "Thanks for posting"
+        elif filename is not None:
+            return filename
+        else:
+            return error_message("Please include fielnme or post array of filenames")
+    except Exception as e:
+        return internal_error(e)
+
+
+
+##################################
+# TODO: CREATE LOGGING FUNCTIONS #
+##################################
+
+
 
 
 # Start app finally

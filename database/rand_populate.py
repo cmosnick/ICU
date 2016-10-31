@@ -2,6 +2,11 @@ import subprocess
 import random
 import requests
 
+NUM_USERS = 10
+NUM_IMAGES = NUM_USERS * 10
+
+
+
 def send_mysql(sql):
     command = ("mysql -uroot -ppass -D'capstone_icu' -e" + sql).replace("\n", "")
     print command
@@ -13,7 +18,7 @@ def get_rand_name():
     name = p.communicate()[0].split(' ')
     return {"firstname" : name[0], "lastname": name[1]}
     
-    
+
 def compose_user(device_id = None):
     name = get_rand_name()
     firstname = name['firstname']
@@ -43,18 +48,28 @@ def compose_user(device_id = None):
 
 
 def create_users():
-    for i in range(0, 10):
+    for i in range(0, NUM_USERS):
         compose_user(device_id=i)
 
 
-# def create_images():
-#     for i in range(0, 10):
-#         create_image(user_id=i)
+def create_images():
+    for i in range(0, NUM_IMAGES):
+        create_image()
 
-# def create_image(user_id):
-    
-
-
+def create_image():
+    # Get random user id
+    user_id = random.sample(xrange(NUM_USERS), 1)[0]
+    # Get image name (one of three)
+    imageNumber = random.sample(xrange(3), 1)[0]
+    if imageNumber == 0:
+        filename = "Mario_png.png"
+    elif imageNumber == 1:
+        filename = "squirrel.jpg"
+    else:
+        filename = "victor-surge-e569f5dc-0425-4d09-a45b-0edd9b0d9478.jpg"
+    sql = "\"INSERT INTO images value (DEFAULT, "+ str(user_id) +", '"+ filename +"', DEFAULT)\""
+    send_mysql(sql)
 
 if __name__ == '__main__':
-    create_users()
+    # create_users()
+    create_images()

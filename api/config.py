@@ -11,3 +11,5 @@ IMAGE_DIRECTORY = "/database/images/"
 # Todo: figure out what pi sends
 ALLOWED_EXTENSIONS = ["jpg", "jpeg", "gif", "png"]
 
+# Maximum size for files (to make sure images aren't too large)
+# MAX_CONTENT_LENGTH = 16 * 1024 * 1024

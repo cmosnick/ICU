@@ -33,6 +33,9 @@ sudo pip install names
 mkdir /database/
 mkdir /database/images
 sudo chmod 771 /database/images
+# copy sample images into directory
+sudo cp /vagrant/database/test_images/* /database/images/
+
 
 #  Install node
 sudo apt-get -y install curl

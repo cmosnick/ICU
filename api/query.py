@@ -96,5 +96,17 @@ def get_sent_image(image_id):
     return session.query(SQLASentImage).filter_by(image_id=image_id).first()
 
 
-def get_images_by_user(user_id):
+def get_images_by_user(user_id=None, username=None):
     session = Session()
+    if user_id is not None:
+        return session.query(SQLAImage).filter_by(user_id = user_id).all()
+    elif username is not None:
+        user = session.query(SQLAUser).filter_by(username = username).first()
+        if user is not None:
+            user_id = user.to_dict()['user_id']
+            return session.query(SQLAImage).filter_by(user_id = user_id).all()
+        else:
+            raise Exception("Could not find user based on username", 1)
+    else:
+        raise Exception("Could not retrieve images for user", 1)
+
