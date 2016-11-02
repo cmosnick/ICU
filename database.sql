@@ -13,11 +13,11 @@ DROP procedure IF EXISTS drop_keys;$$
 create procedure drop_keys()
 begin
 
-IF EXISTS( SELECT table_name 
+IF EXISTS( SELECT table_name
   FROM INFORMATION_SCHEMA.TABLES
-  WHERE (table_name LIKE 'user_settings' 
-    or table_name LIKE 'log' 
-    or table_name LIKE 'images' 
+  WHERE (table_name LIKE 'user_settings'
+    or table_name LIKE 'log'
+    or table_name LIKE 'images'
     or table_name LIKE 'sent_images')
   and table_schema LIKE 'capstone_icu')
 THEN
@@ -113,7 +113,7 @@ DROP TABLE IF EXISTS log CASCADE;
 CREATE TABLE log (
   log_id INTEGER AUTO_INCREMENT,
   user_id INTEGER NOT NULL,
-  action ENUM ('image taken', 'text sent', 'sign in', 'sign out', 'alter accout', 'initial activation'),
+  action ENUM ('image taken', 'text sent', 'email sent', 'sign in', 'sign out', 'alter accout', 'initial activation'),
   date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
   PRIMARY KEY(log_id)
