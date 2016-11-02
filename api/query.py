@@ -43,13 +43,24 @@ def add_user(user_info):
     user = SQLAUser(
         device_id = user_info['device_id'],
         first_name = user_info['first_name'],
-        last_name = user_info['last_name'], 
+        last_name = user_info['last_name'],
         username = user_info['username'],
         password = user_info['password'],
         phone_number = user_info['phone_number'],
         email = user_info['email']
     )
     session.add(user)
+    session.commit()
+    return "Added: " + json.dumps(user_info)
+
+
+def add_log(log_info):
+    session = Session()
+    user = SQLALog(
+        user_id = log_info['user_id'],
+        action = log_info['action']
+    )
+    session.add(log)
     session.commit()
     return "Added: " + json.dumps(user_info)
 
@@ -65,7 +76,7 @@ def get_all_not_opts():
 
 
 def get_user_setting(setting_id):
-    session = Session()    
+    session = Session()
     return session.query(SQLAUserSettings).filter_by(setting_id=setting_id).first()
 
 
@@ -109,4 +120,3 @@ def get_images_by_user(user_id=None, username=None):
             raise Exception("Could not find user based on username", 1)
     else:
         raise Exception("Could not retrieve images for user", 1)
-

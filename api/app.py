@@ -1,4 +1,8 @@
 # TODO: user authentication for any api endpoint use
+# TODO: # need to add functionality in other functions for logs to be sent to
+# the add_log function. actions are: 'image taken', 'text sent', 'email sent',
+# 'sign in', 'sign out', 'alter accout', 'initial activation'
+
 from flask import Flask, jsonify, request
 from utility import *
 from database import db
@@ -116,7 +120,7 @@ def add_user():
                 "username" : username,
                 "password" : password,
                 "phone_number" : phone_number,
-                "email" : email      
+                "email" : email
             })
 
         except Exception as e:
@@ -296,6 +300,20 @@ def download(image_id=None):
 # TODO: CREATE LOGGING FUNCTIONS #
 ##################################
 
+# Add a log to the log table
+# need to add functionality in other functions for logs to be sent to this function
+# actions are: 'image taken', 'text sent', 'email sent',
+# 'sign in', 'sign out', 'alter accout', 'initial activation'
+@app.route('/log/id/<int:user_id>/action/<action>',  methods = ['GET'])
+def add_log():
+    try:
+        return query.add_log({
+            "user_id" : user_id,
+            "action" : action
+        })
+
+    except Exception as e:
+        return internal_error(e)
 
 
 
