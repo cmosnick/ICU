@@ -37,6 +37,16 @@ def get_all_users():
     return session.query(SQLAUser).order_by(User.username).all()
 
 
+def update_user_settings(user_settings_info):
+    session = Session()
+    session.query(user_settings).filter(user_settings.user_id == \
+        user_settings_info["user_id"]).update({'notification_option_id': \
+        notification_option_id}, {'start_time' : user_settings_info["start_time"]}, \
+        {'end_time' : user_settings_info["end_time"]})
+    session.commit()
+    return "Updated: " + json.dumps(user_settings_info)
+
+
 # TODO: finish this
 def add_user(user_info):
     session = Session()
@@ -56,13 +66,13 @@ def add_user(user_info):
 
 def add_log(log_info):
     session = Session()
-    user = SQLALog(
+    log = SQLALog(
         user_id = log_info['user_id'],
         action = log_info['action']
     )
     session.add(log)
     session.commit()
-    return "Added: " + json.dumps(user_info)
+    return "Added: " + json.dumps(log_info)
 
 
 def get_not_opts(not_id=None, username=None, user_id = None):

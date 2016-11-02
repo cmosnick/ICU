@@ -128,6 +128,24 @@ def add_user():
     else:
         return error_message("POST required for user insertion")
 
+# Update user settings
+@app.route('/user_settings/update/', methods = ['POST'])
+def update_user_settings():
+    if request.method == 'POST':
+        try:
+            name = request.args.get('notification_option_id')
+            return query.update_user_settings({
+                "user_id" : request.args.get(user_id),
+                "notification_option_id" : request.args.get(notification_option_id),
+                "start_time" : request.args.get(start_time),
+                "end_time" : request.args.get(end_time)
+            })
+
+        except Exception as e:
+            return internal_error(e)
+    else:
+        return error_message("POST required for user insertion")
+
 
 #########################
 # NOTIFICATION SETTINGS #
