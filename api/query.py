@@ -88,6 +88,21 @@ def add_log(log_info):
     return "Added: " + json.dumps(log_info)
 
 
+def get_logs_by_user(user_id=None, username=None):
+    session = Session()
+    if user_id is not None:
+        return session.query(SQLALog).filter_by(user_id = user_id).all()
+    elif username is not None:
+        user = session.query(SQLAUser).filter_by(username = username).first()
+        if user is not None:
+            user_id = user.to_dict()['user_id']
+            return session.query(SQLALog).filter_by(user_id = user_id).all()
+        else:
+            raise Exception("Could not find user based on username", 1)
+    else:
+        raise Exception("Could not retrieve logs for user", 1)
+
+
 def get_not_opts(not_id=None, username=None, user_id = None):
     session = Session()
     return session.query(SQLANotOpts).filter_by(user_id=user_id).all()

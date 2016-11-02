@@ -129,7 +129,7 @@ def add_user():
         return error_message("POST required for user insertion")
 
 
-# Update user settings
+# Add user settings
 @app.route('/user_settings/add/', methods = ['POST'])
 def add_user_settings():
     if request.method == 'POST':
@@ -342,13 +342,34 @@ def download(image_id=None):
 # actions are: 'image taken', 'text sent', 'email sent',
 # 'sign in', 'sign out', 'alter accout', 'initial activation'
 @app.route('/log/id/<int:user_id>/action/<action>',  methods = ['GET'])
-def add_log():
+def add_log(user_id = None, action = None):
     try:
         return query.add_log({
             "user_id" : user_id,
             "action" : action
         })
 
+    except Exception as e:
+        return internal_error(e)
+
+
+# Get all logs related to a user
+@app.route('/log/info/user/id/<int:user_id>', methods = ['GET'])
+@app.route('/log/info/user/<username>', methods = ['GET'])
+def get_logs_by_user(user_id = None, username = None):
+    try:
+        if ((username is not None) or (user_id is not None)):
+            sqlLogs = query.get_logs_by_user(user_id, username)
+            if sqlLogs is not None:
+                LogsList = []
+                for sqlLog in sqlLogs:
+                    log = Log(sqlLog)
+                    logsList.append(log.to_dict())
+                return jsonify(logsList)
+            else:
+                return error_message("Unable to retrieve log infos for "  . user_id if user_id else username)
+        else:
+            return error_message("Please specify user name or id to retrieve log infos")
     except Exception as e:
         return internal_error(e)
 
