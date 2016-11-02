@@ -47,6 +47,19 @@ def update_user_settings(user_settings_info):
     return "Updated: " + json.dumps(user_settings_info)
 
 
+def add_user_settings(user_settings_info):
+    session = Session()
+    user_settings = SQLAUserSetting(
+        user_id = user_settings_info['user_id'],
+        notification_option_id = user_settings_info['notification_option_id'],
+        start_time = user_settings_info['start_time'],
+        end_time = user_settings_info['end_time']
+    )
+    session.add(user_settings)
+    session.commit()
+    return "Added: " + json.dumps(user_settings_info)
+
+
 # TODO: finish this
 def add_user(user_info):
     session = Session()
