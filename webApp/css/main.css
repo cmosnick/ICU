@@ -106,7 +106,7 @@ body{
     cursor: pointer;
 }
 .FirstSection{
-    background:url("../images/happyneighborhood..jpg") no-repeat;
+    background:url("../images/happyneighborhood.jpg") no-repeat;
     background-size: cover;
     background-position: top;
     height: auto;
@@ -115,7 +115,7 @@ body{
     padding-bottom: 30px;
 }
 .SignUpSection{
-    background:url("../images/happyneighborhood..jpg") no-repeat;
+    background:url("../images/happyneighborhood.jpg") no-repeat;
     background-size: cover;
     background-position: top;
     height: auto;
