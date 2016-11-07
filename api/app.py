@@ -2,8 +2,8 @@
 from flask import Flask, jsonify, request
 from utility import *
 from database import db
-import query
 from models import *
+import query
 import config
 import os
 from werkzeug.utils import secure_filename
@@ -78,6 +78,7 @@ def get_user(user_id = None, username = None, device_id=None):
         return internal_error(e)
 
 # Get all users
+# TODO: add extra info like 'count'
 @app.route('/users/',  methods = ['GET'])
 @app.route('/users/all/',  methods = ['GET'])
 def get_all_users():

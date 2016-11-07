@@ -5,7 +5,7 @@ from sqlalchemy import create_engine
 
 # Auto map databse tables into sqlalchemy objects
 Base = automap_base()
-engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
+# engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
 Base.prepare(engine, reflect=True)
 
 # Name the Sqlalchemy classes
@@ -29,6 +29,7 @@ class CustomBase():
 
     def __init__(self, sqlAlchemyObject):
         self.sqlObj = sqlAlchemyObject
+        
 
     def to_json(self):
         return jsonify(self.to_dict())

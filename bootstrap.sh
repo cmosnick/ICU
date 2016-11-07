@@ -27,7 +27,7 @@ sudo apt-get -y -f install mysql-server
 # echo "\n\nCREATING DATABASE\n\n____________________________________\n"
 mysql -uroot -ppass -e "CREATE DATABASE capstone_icu;"
 mysql -uroot -ppass -e "use capstone_icu;"
-mysql -uroot -ppass -D "capstone_icu" < "/vagrant/database.sql"
+mysql -uroot -ppass -D "capstone_icu" < "/vagrant/database/exported_db.sql"
 sudo pip install names
 # Make directory for files
 mkdir /database/
