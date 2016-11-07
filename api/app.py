@@ -1,4 +1,8 @@
 # TODO: user authentication for any api endpoint use
+# TODO: # need to add functionality in other functions for logs to be sent to
+# the add_log function. actions are: 'image taken', 'text sent', 'email sent',
+# 'sign in', 'sign out', 'alter accout', 'initial activation'
+
 from flask import Flask, jsonify, request
 from utility import *
 from database import db
@@ -117,7 +121,44 @@ def add_user():
                 "username" : username,
                 "password" : password,
                 "phone_number" : phone_number,
-                "email" : email      
+                "email" : email
+            })
+
+        except Exception as e:
+            return internal_error(e)
+    else:
+        return error_message("POST required for user insertion")
+
+
+# Add user settings
+@app.route('/user_settings/add/', methods = ['POST'])
+def add_user_settings():
+    if request.method == 'POST':
+        try:
+            name = request.args.get('notification_option_id')
+            return query.add_user_settings({
+                "user_id" : request.args.get(user_id),
+                "notification_option_id" : request.args.get(notification_option_id),
+                "start_time" : request.args.get(start_time),
+                "end_time" : request.args.get(end_time)
+            })
+
+        except Exception as e:
+            return internal_error(e)
+    else:
+        return error_message("POST required for user insertion")
+
+
+# Update user settings
+@app.route('/user_settings/update/', methods = ['POST'])
+def update_user_settings():
+    if request.method == 'POST':
+        try:
+            return query.update_user_settings({
+                "user_id" : request.args.get(user_id),
+                "notification_option_id" : request.args.get(notification_option_id),
+                "start_time" : request.args.get(start_time),
+                "end_time" : request.args.get(end_time)
             })
 
         except Exception as e:
@@ -297,6 +338,41 @@ def download(image_id=None):
 # TODO: CREATE LOGGING FUNCTIONS #
 ##################################
 
+# Add a log to the log table
+# need to add functionality in other functions for logs to be sent to this function
+# actions are: 'image taken', 'text sent', 'email sent',
+# 'sign in', 'sign out', 'alter accout', 'initial activation'
+@app.route('/log/id/<int:user_id>/action/<action>',  methods = ['GET'])
+def add_log(user_id = None, action = None):
+    try:
+        return query.add_log({
+            "user_id" : user_id,
+            "action" : action
+        })
+
+    except Exception as e:
+        return internal_error(e)
+
+
+# Get all logs related to a user
+@app.route('/log/info/user/id/<int:user_id>', methods = ['GET'])
+@app.route('/log/info/user/<username>', methods = ['GET'])
+def get_logs_by_user(user_id = None, username = None):
+    try:
+        if ((username is not None) or (user_id is not None)):
+            sqlLogs = query.get_logs_by_user(user_id, username)
+            if sqlLogs is not None:
+                LogsList = []
+                for sqlLog in sqlLogs:
+                    log = Log(sqlLog)
+                    logsList.append(log.to_dict())
+                return jsonify(logsList)
+            else:
+                return error_message("Unable to retrieve log infos for "  . user_id if user_id else username)
+        else:
+            return error_message("Please specify user name or id to retrieve log infos")
+    except Exception as e:
+        return internal_error(e)
 
 
 

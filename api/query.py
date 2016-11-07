@@ -37,13 +37,36 @@ def get_all_users():
     return session.query(SQLAUser).order_by(User.username).all()
 
 
+def update_user_settings(user_settings_info):
+    session = Session()
+    session.query(user_settings).filter(user_settings.user_id == \
+        user_settings_info["user_id"]).update({'notification_option_id': \
+        notification_option_id}, {'start_time' : user_settings_info["start_time"]}, \
+        {'end_time' : user_settings_info["end_time"]})
+    session.commit()
+    return "Updated: " + json.dumps(user_settings_info)
+
+
+def add_user_settings(user_settings_info):
+    session = Session()
+    user_settings = SQLAUserSetting(
+        user_id = user_settings_info['user_id'],
+        notification_option_id = user_settings_info['notification_option_id'],
+        start_time = user_settings_info['start_time'],
+        end_time = user_settings_info['end_time']
+    )
+    session.add(user_settings)
+    session.commit()
+    return "Added: " + json.dumps(user_settings_info)
+
+
 # TODO: finish this
 def add_user(user_info):
     session = Session()
     user = SQLAUser(
         device_id = user_info['device_id'],
         first_name = user_info['first_name'],
-        last_name = user_info['last_name'], 
+        last_name = user_info['last_name'],
         username = user_info['username'],
         password = user_info['password'],
         phone_number = user_info['phone_number'],
@@ -52,6 +75,32 @@ def add_user(user_info):
     session.add(user)
     session.commit()
     return "Added: " + json.dumps(user_info)
+
+
+def add_log(log_info):
+    session = Session()
+    log = SQLALog(
+        user_id = log_info['user_id'],
+        action = log_info['action']
+    )
+    session.add(log)
+    session.commit()
+    return "Added: " + json.dumps(log_info)
+
+
+def get_logs_by_user(user_id=None, username=None):
+    session = Session()
+    if user_id is not None:
+        return session.query(SQLALog).filter_by(user_id = user_id).all()
+    elif username is not None:
+        user = session.query(SQLAUser).filter_by(username = username).first()
+        if user is not None:
+            user_id = user.to_dict()['user_id']
+            return session.query(SQLALog).filter_by(user_id = user_id).all()
+        else:
+            raise Exception("Could not find user based on username", 1)
+    else:
+        raise Exception("Could not retrieve logs for user", 1)
 
 
 def get_not_opts(not_id=None, username=None, user_id = None):
@@ -65,7 +114,7 @@ def get_all_not_opts():
 
 
 def get_user_setting(setting_id):
-    session = Session()    
+    session = Session()
     return session.query(SQLAUserSettings).filter_by(setting_id=setting_id).first()
 
 
@@ -109,4 +158,3 @@ def get_images_by_user(user_id=None, username=None):
             raise Exception("Could not find user based on username", 1)
     else:
         raise Exception("Could not retrieve images for user", 1)
-
