@@ -2,6 +2,7 @@
 
 ###Contents
 * [Users](#user-routes)
+* [Notifications](#notification-settings-routes)
 * [Images](#image-routes)
 
 
@@ -102,6 +103,22 @@
   "phone_number" = "8159751442"
 }
  ```
+
+
+##Notification Settings Routes
+
+* __/notification_options/\<int:not_id\>__
+ * GET notification settings by notification id
+* __/notification_options/user/\<username\>__
+ * GET notification settings by user name
+* __/notification_options/user/id/\<int:user_id\>__
+ * GET notfication settings by user id
+
+
+```
+
+```
+
 
 
 
