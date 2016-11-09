@@ -93,13 +93,13 @@ def add_user():
     try:
         if request.method == 'POST':
         # TODO: check all fields are in request before accessing request args
-            first_name = request.args.get('first_name')
-            last_name = request.args.get('last_name')
-            device_id = request.args.get('device_id')
-            username = request.args.get('username')
-            password = request.args.get('password')
-            phone_number = request.args.get('phone_number')
-            email = request.args.get('email')
+            first_name = request.form.get('first_name')
+            last_name = request.form.get('last_name')
+            device_id = request.form.get('device_id')
+            username = request.form.get('username')
+            password = request.form.get('password')
+            phone_number = request.form.get('phone_number')
+            email = request.form.get('email')
             
 
             sql_user = query.add_user({
