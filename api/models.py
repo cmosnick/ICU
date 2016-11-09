@@ -11,7 +11,7 @@ Base.prepare(engine, reflect=True)
 
 # Name the Sqlalchemy classes
 SQLAUser = Base.classes.users
-SQLANotOpts = Base.classes.users
+SQLANotOpts = Base.classes.notification_options
 SQLAUserSetting = Base.classes.user_settings
 SQLALog = Base.classes.log
 SQLAImage = Base.classes.images
@@ -39,7 +39,7 @@ class CustomBase():
         obj = {}
         for field in self.fields:
             print self.sqlObj.__dict__[field]
-            obj[field] = self.sqlObj.__dict__[field]
+            obj[field] = str(self.sqlObj.__dict__[field])
         return obj
 
 

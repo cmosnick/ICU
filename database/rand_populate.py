@@ -45,6 +45,7 @@ def create_images():
     for i in range(0, NUM_IMAGES):
         create_image()
 
+# Todo convert random xrange to randint
 def create_image():
     # Get random user id
     user_id = random.sample(xrange(NUM_USERS), 1)[0]
@@ -60,6 +61,33 @@ def create_image():
     sql = "\"INSERT INTO images value (DEFAULT, "+ str(user_id) +", '"+ filename +"', DEFAULT)\""
     send_mysql(sql)
 
+def create_all_user_settings():
+    for user_id in range(0, NUM_USERS):
+        create_user_settings_for_user(user_id)
+
+
+def create_user_settings_for_user(user_id=1):
+    # Choose random text email or both
+    enumName = random.randint(1,3)
+    if enumName == 0:
+        notType = 'text'
+    elif enumName == 1:
+        notType = 'email'
+    else:
+        notType = 'both'    
+
+    #Start time
+    startTime = str(random.randint(0,23)) + ":" + str(random.randint(0, 59)) 
+    #End time
+    endTime   = str(random.randint(0,23)) + ":" + str(random.randint(0, 59)) 
+
+    sql = "\"INSERT INTO user_settings value( DEFAULT, '"+str(user_id)+"', "+ str(enumName) +", '"+startTime+"', '"+endTime+"');\""
+    send_mysql(sql)
+
+
+
+
 if __name__ == '__main__':
-    create_users()
-    create_images()
+    # create_users()
+    # create_images()
+    # create_all_user_settings()

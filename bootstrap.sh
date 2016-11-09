@@ -14,6 +14,7 @@ printf "Y" | sudo apt-get install python-pip
 cd /vagrant/api
 sudo pip install Flask-API
 sudo pip install flask_sqlalchemy
+sudo pip install -U flask-cors
 sudo pip install pymysql
 chmod a+x app.py
 python app.py &

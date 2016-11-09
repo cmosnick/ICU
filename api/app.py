@@ -2,8 +2,11 @@
 # TODO: # need to add functionality in other functions for logs to be sent to
 # the add_log function. actions are: 'image taken', 'text sent', 'email sent',
 # 'sign in', 'sign out', 'alter accout', 'initial activation'
+#
+# TODO: add custom 404 message / page
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
+from flask_cors import CORS, cross_origin
 from utility import *
 from database import db
 from models import *
@@ -12,11 +15,14 @@ import config
 import os
 from werkzeug.utils import secure_filename
 import uuid
+from sqlalchemy import DateTime
+import datetime
 
 
 app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
+CORS(app)
 
 
 # Create error messages
@@ -35,26 +41,6 @@ def error_message(message):
 @app.route('/')
 def api_root():
     return 'Welcome'
-
-@app.route('/hello')
-def api_hello():
-    return get_db()
-
-# @app.route('/add/user')
-# def add_user():
-#     user = SQLAUser(
-#         device_id = "0001",
-#         first_name = "Christina",
-#         last_name = "Mosnick",
-#         username = "cmosnick",
-#         password = "pass",
-#         email = "cmosnick07@gmail.com",
-#         phone_number = "8159751442"
-#     )
-#     # return user.first_name
-#     # session = create_session
-#     return query.add(user)
-#     # return "User added: ";
 
 
 #########
@@ -104,9 +90,9 @@ def get_all_users():
 # Add a user
 @app.route('/user/add/', methods = ['POST'])
 def add_user():
-    if request.method == 'POST':
+    try:
+        if request.method == 'POST':
         # TODO: check all fields are in request before accessing request args
-        try:
             first_name = request.args.get('first_name')
             last_name = request.args.get('last_name')
             device_id = request.args.get('device_id')
@@ -114,7 +100,9 @@ def add_user():
             password = request.args.get('password')
             phone_number = request.args.get('phone_number')
             email = request.args.get('email')
-            return query.add_user({
+            
+
+            sql_user = query.add_user({
                 "first_name" : first_name,
                 "last_name" : last_name,
                 "device_id" : device_id,
@@ -123,72 +111,101 @@ def add_user():
                 "phone_number" : phone_number,
                 "email" : email
             })
-
-        except Exception as e:
+            user = User(sql_user)
+            user_id = user.to_dict()['user_id']
+            if user_id >= 0:
+                # Add default notification settings for user
+                add_default_user_settings(user_id)
+                return user_id
+        else:
+            return error_message("POST required for user insertion")
+    except Exception as e:
             return internal_error(e)
-    else:
-        return error_message("POST required for user insertion")
 
+@app.route('/user/add/settings_test/', methods = ['GET'])
+def add_default_user_settings(user_id = 5):
+    return add_user_settings({
+        "notification_option_id" : 3,
+        "user_id" : 5,
+        "start_time" : datetime.datetime.strptime("00:00", '%H:%M').time(),
+        "end_time" : datetime.datetime.strptime("23:59", '%H:%M').time()
+        })
 
 # Add user settings
 @app.route('/user_settings/add/', methods = ['POST'])
-def add_user_settings():
-    if request.method == 'POST':
-        try:
-            name = request.args.get('notification_option_id')
+def add_user_settings(params = None):
+    try:
+        if params is not None:
+            # TODO: check params
+            return query.add_user_settings(params)
+        else:
+            # TODO: check if this works?
+            # TODO: decide if notification_option id should be the enum string instead "text", "email", "both"
+            name = request.form.get('notification_option_id')
             return query.add_user_settings({
-                "user_id" : request.args.get(user_id),
-                "notification_option_id" : request.args.get(notification_option_id),
-                "start_time" : request.args.get(start_time),
-                "end_time" : request.args.get(end_time)
+                "user_id" : request.form.get('user_id'),
+                "notification_option_id" : request.form.get('notification_option_id'),
+                "start_time" : request.form.get('start_time'),
+                "end_time" : request.form.get('end_time')
             })
-
-        except Exception as e:
-            return internal_error(e)
-    else:
-        return error_message("POST required for user insertion")
+    except Exception as e:
+        return internal_error(e)
 
 
 # Update user settings
+# TODO: filter update to not require all fields
 @app.route('/user_settings/update/', methods = ['POST'])
 def update_user_settings():
     if request.method == 'POST':
         try:
-            return query.update_user_settings({
-                "user_id" : request.args.get(user_id),
-                "notification_option_id" : request.args.get(notification_option_id),
-                "start_time" : request.args.get(start_time),
-                "end_time" : request.args.get(end_time)
-            })
+            if request.form.has_key('user_id'):
+                user_id = request.form.get('user_id')
+
+                update_fields = []
+
+                if request.form.has_key('notification_option_id'):
+                    update_fields.append({'notification_option_id' : request.form.get('notification_option_id')})
+
+                if request.form.has_key('start_time'):
+                    update_fields.append({'start_time' : request.form.get('start_time')})
+
+                if request.form.has_key('end_time'):
+                    update_fields.append({'end_time' : request.form.get('end_time')})
+
+                return query.update_user_settings(user_id, update_fields)               
+
+            else:
+                return error_message("Must specify user_id to update")
 
         except Exception as e:
             return internal_error(e)
     else:
         return error_message("POST required for user insertion")
 
+
+# TODO: add route to update user info
 
 #########################
 # NOTIFICATION SETTINGS #
 #########################
 
+#TODO: should not_opts table and user settings table be combined?  m-m relationship?
 # Get options by not_opt id, user id, or username
 @app.route('/notification_options/<int:not_id>', methods = ['GET'])
-@app.route('/notification_options/user/<username>',  methods = ['GET'])
-@app.route('/notification_options/user/id/<int:user_id>',  methods = ['GET'])
-def get_notification_options(not_id=None, username=None, user_id = None):
+def get_notification_options(not_id=None):
     try:
-        if ((not_id is not None) or (username is not None) or (user_id is not None)):
-            sqlaNotOpts = query.get_not_opts(not_id, username, user_id)
+        if (not_id is not None):
+            sqlaNotOpts = query.get_not_opts(not_id)
             if sqlaNotOpts is not None:
                 options = []
                 for sqlaOption in sqlaNotOpts:
-                    option = NotOPt(sqlaOption)
+                    option = NotOpt(sqlaOption)
                     options.append(option.to_dict())
                 return jsonify(options)
             else:
                 return error_message("Could not retrieve notification options")
         else:
-            return error_message("Please specify user or id to get notification options")
+            return error_message("Please specify id to get notification options")
 
     except Exception as e:
         return internal_error(e)
@@ -203,8 +220,9 @@ def get_all_notification_options():
         sqlaOptions = query.get_all_not_opts()
         if sqlaOptions is not None:
             optionsList = []
+            print "here"
             for sqlOption in sqlaOptions:
-                option = NotOPt(sqlaOptions)
+                option = NotOpt(sqlOption)
                 optionsList.append(option.to_dict())
             return jsonify(optionsList)
         else:
@@ -213,6 +231,48 @@ def get_all_notification_options():
     except Exception as e:
         return internal_error(e)
 
+
+
+#################
+# USER SETTINGS #
+#################
+# TODO: do a join with user info?
+@app.route('/user_settings/setting/<int:setting_id>', methods = ['GET'])
+@app.route('/user_settings/<username>', methods = ['GET'])
+@app.route('/user_settings/id/<int:user_id>', methods = ['GET'])
+def get_user_settings(username = None, user_id = None, setting_id = None):
+    try:
+        if username is not None:
+            # get user id for that username
+            user_id = query.get_user_id(username)
+            if user_id is None:
+                return error_message("no user found for username " + username)
+        if user_id is not None:
+            # Get notification settings for user_id
+            sql_user_settings = query.get_user_settings(None, user_id)
+            if sql_user_settings is not None:
+                user_settings = UserSetting(sql_user_settings)
+                return user_settings.to_json()
+            else:
+                return error_message("No user found for user_id " +str(user_id))
+        if setting_id is not None:
+            sql_user_settings = query.get_user_settings(setting_id)
+            if sql_user_settings is not None:
+                user_settings = UserSetting(sql_user_settings)
+                return user_settings.to_json()
+            else:
+                return error_message("No settings found for id " + str(setting_id))
+        return error_message("Please specify notification id, username, or user_id")
+    except Exception as e:
+        return internal_error(e)
+
+
+# TODO: make route to retrieve user info, user settings all in one
+
+
+
+# TODO: make route to retrieve ALL user info all at once
+# user settings, user info, all pictures (filepaths) associated with user, etc.
 
 ##########
 # IMAGES #
@@ -224,15 +284,18 @@ def get_all_notification_options():
 def get_image(image_id = None):
     try:
         if image_id is not None:
-            # info = loads(get_image_info(image_id))
-            # filePath = info.image
+            info = get_image_info(image_id)
+            filename = info.image
             # Todo: complete the actual sending of the image
-            return "hello"
+            return send_file(filename, )
+
         else:
             return error_message("Please specify image_id")
     except Exception as e:
         return internal_error(e)
 
+
+# Get image by filepath?  *Idk if that is safe*
 
 # Get image info by image id
 @app.route('/image/info/id/', methods = ['GET'])
@@ -258,7 +321,6 @@ def get_image_info(image_id = None):
 def get_images_by_user(user_id = None, username = None):
     try:
         if ((username is not None) or (user_id is not None)):
-            # TODO: implement query function
             sqlImages = query.get_images_by_user(user_id, username)
             if sqlImages is not None:
                 imagesList = []
@@ -274,6 +336,9 @@ def get_images_by_user(user_id = None, username = None):
         return internal_error(e)
 
 
+
+
+
 ################
 # UPLOAD IMAGE #
 ################
@@ -282,39 +347,44 @@ def get_images_by_user(user_id = None, username = None):
 @app.route('/image/add/', methods=['POST'])
 @app.route('/image/add/<int:device_id>', methods=['POST'])
 def upload_file(device_id = None):
-    if request.method == 'POST':
-        if device_id is not None:
-            # check if the post request has the file part
-            if 'file' not in request.files:
-                return error_message('No file attached in request')
-            file = request.files['file']
-            # Rename file so no conflicts in directory
-            filename, fileExtension = os.path.splitext(file.filename)
-            # TODO: put check for file extension (what does Pi take?)
-            filename = str(uuid.uuid4()) + fileExtension
-            print filename
-            if file and allowed_file(filename):
-                filename = secure_filename(filename)
-                file.save(os.path.join(app.config['IMAGE_DIRECTORY'], filename))
-                # Get user id from sender device
-                sqlaUser = query.get_user(device_id=device_id)
-                user = User(sqlaUser)
-                print user.to_json()
-                if user is None:
-                    return error_message("No user associated with device id")
-                user = User(sqlaUser)
-                print user.to_json()
-                user_id = user.to_dict()['user_id']
-                print user_id
-                # Add image info to db
-                return query.add_image_info({
-                    "user_id" : user_id,
-                    "image" : filename
-                })
+    try:
+        if request.method == 'POST':
+            if device_id is not None:
+                # check if the post request has the file part
+                if 'file' not in request.files:
+                    return error_message('No file attached in request')
+                file = request.files['file']
+                # Rename file so no conflicts in directory
+                filename, fileExtension = os.path.splitext(file.filename)
+                # TODO: put check for file extension (what does Pi take?) .jp(e)g
+                filename = str(uuid.uuid4()) + fileExtension
+                print filename
+                if file and allowed_file(filename):
+                    filename = secure_filename(filename)
+                    file.save(os.path.join(app.config['IMAGE_DIRECTORY'], filename))
+                    # Get user id from sender device
+                    sqlaUser = query.get_user(device_id=device_id)
+                    user = User(sqlaUser)
+                    print user.to_json()
+                    if user is None:
+                        return error_message("No user associated with device id")
+                    user = User(sqlaUser)
+                    print user.to_json()
+                    user_id = user.to_dict()['user_id']
+                    print user_id
+                    # Add image info to db
+                    return query.add_image_info({
+                        "user_id" : user_id,
+                        "image" : filename
+                    })
+                    # TODO: send image to user (James)
+
+                else:
+                    return error_message("Bad filename. Our bad.")
             else:
-                return error_message("Bad filename. Our bad.")
-        else:
-            return error_message("Specify device id corresponding to image")
+                return error_message("Specify device id corresponding to image")
+    except Exception as e:
+        return internal_error(e)
 
 
 # Route to retrieve image(s) by id. Can receive filename or json array of filenames
@@ -339,7 +409,7 @@ def download(image_id=None):
 ##################################
 
 # Add a log to the log table
-# need to add functionality in other functions for logs to be sent to this function
+# TODO: need to add functionality in other functions for logs to be sent to this function
 # actions are: 'image taken', 'text sent', 'email sent',
 # 'sign in', 'sign out', 'alter accout', 'initial activation'
 @app.route('/log/id/<int:user_id>/action/<action>',  methods = ['GET'])

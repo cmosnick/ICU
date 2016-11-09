@@ -1,3 +1,4 @@
+# TODO: determine standard return format for insert and update
 import json
 from database import db, engine
 from models import *
@@ -21,13 +22,13 @@ def add(obj):
 def get_user(user_id=None, username=None, device_id=None):
     session = Session()
     if user_id is not None:
-        print user_id
+        # print user_id
         return session.query(SQLAUser).filter_by(user_id=user_id).first()
     elif username is not None:
-        print username
+        # print username
         return session.query(SQLAUser).filter_by(username=username).first()
     elif device_id is not None:
-        print device_id
+        # print device_id
         return session.query(SQLAUser).filter_by(device_id=device_id).first()
     else:
         raise Exception("Could not retrieve user")
@@ -36,15 +37,18 @@ def get_all_users():
     session = Session()
     return session.query(SQLAUser).order_by(User.username).all()
 
-
-def update_user_settings(user_settings_info):
+def get_user_id(username):
     session = Session()
-    session.query(user_settings).filter(user_settings.user_id == \
-        user_settings_info["user_id"]).update({'notification_option_id': \
-        notification_option_id}, {'start_time' : user_settings_info["start_time"]}, \
-        {'end_time' : user_settings_info["end_time"]})
+    return session.query(SQLAUser).with_entities(SQLAUser.user_id).filter_by(username = username).first()
+
+
+def update_user_settings(user_id, update_fields):
+    session = Session()
+    for field_w_value in update_fields:
+        print field_w_value
+        session.query(SQLAUserSetting).filter_by(user_id = user_id).update(field_w_value)
     session.commit()
-    return "Updated: " + json.dumps(user_settings_info)
+    return "Updated: " + str(user_id)
 
 
 def add_user_settings(user_settings_info):
@@ -60,21 +64,24 @@ def add_user_settings(user_settings_info):
     return "Added: " + json.dumps(user_settings_info)
 
 
-# TODO: finish this
+# TODO: finish this.  Is this not finished?
 def add_user(user_info):
-    session = Session()
-    user = SQLAUser(
-        device_id = user_info['device_id'],
-        first_name = user_info['first_name'],
-        last_name = user_info['last_name'],
-        username = user_info['username'],
-        password = user_info['password'],
-        phone_number = user_info['phone_number'],
-        email = user_info['email']
-    )
-    session.add(user)
-    session.commit()
-    return "Added: " + json.dumps(user_info)
+    try:
+        session = Session()
+        user = SQLAUser(
+            device_id = user_info['device_id'],
+            first_name = user_info['first_name'],
+            last_name = user_info['last_name'],
+            username = user_info['username'],
+            password = user_info['password'],
+            phone_number = user_info['phone_number'],
+            email = user_info['email']
+        )
+        session.add(user)
+        session.commit()
+        return user.to_dict()
+    except Exception as e:
+        return False
 
 
 def add_log(log_info):
@@ -103,19 +110,22 @@ def get_logs_by_user(user_id=None, username=None):
         raise Exception("Could not retrieve logs for user", 1)
 
 
-def get_not_opts(not_id=None, username=None, user_id = None):
+def get_not_opts(not_id=None):
     session = Session()
-    return session.query(SQLANotOpts).filter_by(user_id=user_id).all()
+    return session.query(SQLANotOpts).filter_by(notification_id=not_id).all()
 
 
 def get_all_not_opts():
     session = Session()
-    return session.query(SQLANotOpts).order_by(SQLANotOpts.user_id).all()
+    return session.query(SQLANotOpts).order_by(SQLANotOpts.notification_id).all()
 
 
-def get_user_setting(setting_id):
+def get_user_settings(setting_id = None, user_id = None):
     session = Session()
-    return session.query(SQLAUserSettings).filter_by(setting_id=setting_id).first()
+    if setting_id is not None:
+        return session.query(SQLAUserSetting).filter_by(setting_id=setting_id).first()
+    if user_id is not None:
+        return session.query(SQLAUserSetting).filter_by(user_id=user_id).first()
 
 
 def get_log(log_id):
