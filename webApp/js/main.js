@@ -3,7 +3,7 @@ function signUp()
 	console.log($("#fname").val());
 
 	//this route will most likely need to change, revisit once the API is up
-	$.post("icu.service:5000/user/add/",
+	$.post("http://icu.services:5000/user/add/",
 	{
 		first_name: $("#fname").val(),
 		last_name: $("#lname").val(),
@@ -15,14 +15,30 @@ function signUp()
 		
 	},
 	function(data, status){
-		alert("Data: " + data + "\nStatus: " + status);
+		console.log("User add: " );
+		console.log(data);
+		console.log(status);
 	});
+	
+	
+	$.get("http://icu.services:5000/log/id/5/action/initial activation",
+	{
+		user_id: 7,
+		action: 'initial activation',
+		
+	},
+	function(data, status){
+		console.log("Log: " );
+		console.log(data);
+		console.log(status);
+	});
+	
 };
 
 function login()
 {
 	//this route will def need to change, just a placeholder for now
-	$.post("icu.service:5000/login/",
+	$.post("http://icu.services:5000/login/",
 	{
 		username: $("#username").val(),
 		password: $("#password").val(),
