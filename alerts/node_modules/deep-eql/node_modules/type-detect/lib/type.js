@@ -10,6 +10,18 @@
 
 var exports = module.exports = getType;
 
+/*!
+ * Detectable javascript natives
+ */
+
+var natives = {
+    '[object Array]': 'array'
+  , '[object RegExp]': 'regexp'
+  , '[object Function]': 'function'
+  , '[object Arguments]': 'arguments'
+  , '[object Date]': 'date'
+};
+
 /**
  * ### typeOf (obj)
  *
@@ -21,17 +33,14 @@ var exports = module.exports = getType;
  * @return {String} object type
  * @api public
  */
-var objectTypeRegexp = /^\[object (.*)\]$/;
 
-function getType(obj) {
-  var type = Object.prototype.toString.call(obj).match(objectTypeRegexp)[1].toLowerCase();
-  // Let "new String('')" return 'object'
-  if (typeof Promise === 'function' && obj instanceof Promise) return 'promise';
-  // PhantomJS has type "DOMWindow" for null
+function getType (obj) {
+  var str = Object.prototype.toString.call(obj);
+  if (natives[str]) return natives[str];
   if (obj === null) return 'null';
-  // PhantomJS has type "DOMWindow" for undefined
   if (obj === undefined) return 'undefined';
-  return type;
+  if (obj === Object(obj)) return 'object';
+  return typeof obj;
 }
 
 exports.Library = Library;
@@ -47,8 +56,7 @@ exports.Library = Library;
  *
  */
 
-function Library() {
-  if (!(this instanceof Library)) return new Library();
+function Library () {
   this.tests = {};
 }
 
@@ -96,7 +104,7 @@ Library.prototype.of = getType;
  * @api public
  */
 
-Library.prototype.define = function(type, test) {
+Library.prototype.define = function (type, test) {
   if (arguments.length === 1) return this.tests[type];
   this.tests[type] = test;
   return this;
@@ -120,7 +128,7 @@ Library.prototype.define = function(type, test) {
  * @api public
  */
 
-Library.prototype.test = function(obj, type) {
+Library.prototype.test = function (obj, type) {
   if (type === getType(obj)) return true;
   var test = this.tests[type];
 
