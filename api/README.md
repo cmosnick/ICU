@@ -2,6 +2,8 @@
 
 ###Contents
 * [Users](#user-routes)
+* [Notifications](#notification-settings-routes)
+* [User Settings](#user-settings-routes)
 * [Images](#image-routes)
 
 
@@ -103,6 +105,41 @@
 }
  ```
 
+
+##Notification Settings Routes
+
+* __/notification_options/\<int:not_id\>__
+ * GET notification settings by notification id
+
+
+```
+[
+  {
+    "name": "text", 
+    "notification_id": "1"
+  }
+]
+```
+
+
+##User Settings Routes
+
+* __/user_settings/setting/\<int:setting_id\>__
+ * GET user settings based on setting id.  I don't see a practical application for this
+* __/user_settings/\<username\>__
+ * GET user settings based on username
+* __/user_settings/id/\<int:user_id\>__
+ * GET user settings absed on user_id
+ 
+```
+{
+  "end_time": "10:37:00", 
+  "notification_option_id": "2", 
+  "setting_id": "5", 
+  "start_time": "05:02:00", 
+  "user_id": "5"
+}
+```
 
 
 
