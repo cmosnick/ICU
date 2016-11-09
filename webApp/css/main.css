@@ -165,6 +165,10 @@ body{
 .Marketing:last-of-type{
     margin-right: 0px;
 }
+.DashButton:hover{
+	background:rgba(255, 255, 255, 0.9);
+}
+
 .MarketingPic{
     height: 80px;
     width:80px;
