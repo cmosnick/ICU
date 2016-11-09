@@ -73,3 +73,6 @@ app.get('/emailUser', function(req, res){
 
 app.listen(port);
 console.log('Server running on port: ' + port);
+
+// Export Express app
+module.exports = app;
