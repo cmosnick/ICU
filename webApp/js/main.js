@@ -18,21 +18,23 @@ function signUp()
 		console.log("User add: " );
 		console.log(data);
 		console.log(status);
-	});
-	
-	
-	$.get("http://icu.services:5000/log/id/5/action/initial activation",
-	{
-		user_id: 7,
-		action: 'initial activation',
 		
-	},
-	function(data, status){
-		console.log("Log: " );
-		console.log(data);
-		console.log(status);
+		if(status === 'success')
+		{
+			$.get("http://icu.services:5000/log/id/5/action/initial activation",
+			{},
+			function(data, status){
+				console.log("Log Activation: " );
+				console.log(data);
+				console.log(status);
+		
+				if(status === 'success')
+				{
+				window.location.href = "http://icu.services"
+				}
+			});
+		}
 	});
-	
 };
 
 function login()
