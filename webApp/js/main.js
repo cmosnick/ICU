@@ -46,3 +46,24 @@ function login()
 			});
 	});
 }
+
+function getImages(userId, htmlId)
+{
+	$.get("http://icu.services:5000/image/info/user/id/" + userId,
+	{	
+	},
+	function(data, status){		
+		var html = "";
+		
+		for(var i = 0; i < data.length; i++)
+		{
+			var timestamp = data[i].date_time;
+			var imageURL = data[i].image;
+			
+			html += '<div class="imgContainer"><a target="_blank" href="' + imageURL + '"><img src="' + 'images/test1.png' + '" alt="Logo"><div class="after">' + timestamp + '</div></a></div>';
+		}
+		
+		$('#' + htmlId).html(html);
+		
+	});
+}
