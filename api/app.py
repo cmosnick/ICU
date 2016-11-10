@@ -17,12 +17,14 @@ from werkzeug.utils import secure_filename
 import uuid
 from sqlalchemy import DateTime
 import datetime
+import os
 
 
 app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 CORS(app)
+app.secret_key = os.urandom(24)
 
 
 # Create error messages
@@ -86,6 +88,30 @@ def get_all_users():
             return jsonify(usersList)
         else:
             return error_message("Could not retrieve users")
+
+    except Exception as e:
+        return internal_error(e)
+
+# logs a user in
+@app.route('/user/login', methods = ["POST"])
+def login():
+    try:
+        if request.method == 'POST':
+        # TODO: check all fields are in request before accessing request args
+            username = request.form.get('username')
+            password = request.form.get('password')            
+
+            sqlaUser = query.login({
+            	"username" : username, 
+            	"password" : password
+            })
+            if sqlaUser is not None:
+                session['username'] = username
+                return "success"
+            else:
+                return error_message("Could not retrieve user")
+        else:
+            return error_message("POST required for user insertion")
 
     except Exception as e:
         return internal_error(e)

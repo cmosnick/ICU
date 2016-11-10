@@ -30,25 +30,12 @@
         </div>
     </header>
     
-    <div class="MainContent">
-        <section class="SignUpSection">
-            <h1 class="IntroHeading">Log In</h1>
-            <div class="SignUpContainer">
-                <div class="SignUpContentContainer">
-				<h4 class="BillingH4">Account Info</h4>
-                    <div class="TextboxLableContainer2">
-                        <label>User Name</label>
-                        <input id="username" type="text" name="lname" class="textbox">
-                    </div>
-                    <div class="TextboxLableContainer2">
-                        <label>Password</label>
-                        <input id="password" type="password" name="lname" class="textbox">
-                    </div>
-                    
-                    <button type="button" class="SubmitBtn">Submit</button>
-                </div>
+   <div class="MainContent">
+        <section class="FirstSection">
+            <h1 class="IntroHeading">My Images</h1>
+            <div class="images" id="imageContainer">
+
             </div>
-            
         </section>
         
     </div>
@@ -58,6 +45,11 @@
     </footer>
 </body>
 <script>
-	$(".SubmitBtn").click(login);
+	$(function() 
+	{
+		var htmlId = "imageContainer";
+		var userId = 2;
+		getImages(userId, htmlId);
+	});
 </script>
 </html>
