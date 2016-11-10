@@ -29,14 +29,15 @@ function signUp()
 function login()
 {
 	//this route will def need to change, just a placeholder for now
-	$.post("http://icu.services:5000/login/",
+	$.post("http://icu.services:5000/user/login/",
 	{
 		username: $("#username").val(),
 		password: $("#password").val(),
 		
 	},
 	function(data, status){
-		$.get("http://icu.services:5000/log/id/5/action/sign in",
+		if(status === 'success'){
+			$.get("http://icu.services:5000/log/id/5/action/sign in",
 			{},
 			function(data, status){
 				if(status === 'success')
@@ -44,5 +45,7 @@ function login()
 					window.location.href = "http://icu.services/Dashboard.html"
 				}
 			});
+		}
+		
 	});
 }
