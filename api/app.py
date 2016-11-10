@@ -113,7 +113,7 @@ def login():
     except Exception as e:
         return internal_error(e)
 
-# logs a user in
+# logs a user out
 @app.route('/user/logout')
 def logout():
     try:
@@ -149,6 +149,7 @@ def add_user():
             user = User(sql_user)
             user_id = user.to_dict()['user_id']
             if user_id >= 0:
+            	session['username'] = username
                 # Add default notification settings for user
                 add_default_user_settings(user_id)
                 return user_id
