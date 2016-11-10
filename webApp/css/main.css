@@ -433,6 +433,7 @@ div.imgContainer:hover .after{
     height: 100%;
     display: none;
     color: #FFF;
+	border-radius: 8px;
 }
 
 div.imgContainer img {
