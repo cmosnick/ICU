@@ -33,49 +33,9 @@
    <div class="MainContent">
         <section class="SignUpSection">
             <h1 class="IntroHeading">My Images</h1>
-            <div class="images">
-
-                <div class="imgContainer">
-					<a target="_blank" href="images/test1.png">
-						<img src="images/test1.png" alt="Logo">
-						<div class="after">31st Oct 2016, 5:46:27pm</div>
-					</a>
-				</div>
-				<div class="imgContainer">
-					<a target="_blank" href="images/test2.jpg">
-						<img src="images/test2.jpg" alt="Logo">
-						<div class="after">31st Oct 2016, 5:46:27pm</div>
-					</a>
-				</div>
-				<div class="imgContainer">
-					<a target="_blank" href="images/test3.png">
-						<img src="images/test3.png" alt="Logo">
-						<div class="after">31st Oct 2016, 5:46:27pm</div>
-					</a>
-				</div>
-				<div class="imgContainer">
-					<a target="_blank" href="images/test4.png">
-						<img src="images/test4.png" alt="Logo">
-						<div class="after">31st Oct 2016, 5:46:27pm</div>
-					</a>
-				</div>
-				
-				<div class="imgContainer">
-					<a target="_blank" href="images/test5.png">
-						<img src="images/test5.png" alt="Logo">
-						<div class="after">31st Oct 2016, 5:46:27pm</div>
-					</a>
-				</div>
-				
-				<div class="imgContainer">
-					<a target="_blank" href="images/test6.jpg">
-						<img src="images/test6.jpg" alt="Logo">
-						<div class="after">31st Oct 2016, 5:46:27pm</div>
-					</a>
-				</div>
+            <div class="images" id="imageContainer">
 
             </div>
-            
         </section>
         
     </div>
@@ -88,9 +48,19 @@
 	$.get("http://icu.services:5000/image/info/user/id/2",
 	{	
 	},
-	function(data, status){
-		console.log("Get Images: " );
-		console.log(data);
+	function(data, status){		
+		var html = "";
+		
+		for(var i = 0; i < data.length; i++)
+		{
+			var timestamp = data[i].date_time;
+			var imageURL = data[i].image;
+			
+			html += '<div class="imgContainer"><a target="_blank" href="' + imageURL + '"><img src="' + 'images/test1.png' + '" alt="Logo"><div class="after">' + timestamp + '</div></a></div>';
+		}
+		
+		$('#imageContainer').html(html);
+		
 	});
 </script>
 </html>

@@ -1,6 +1,7 @@
 .Header{
     position: fixed;
     width:100%;
+	z-index:1;
 }
 .GrayBar{
     width:100%;
@@ -418,7 +419,7 @@ div.imgContainer {
 
 div.imgContainer:hover .after{
     display: block;
-    background: rgba(0, 0, 0, .9);
+    background: rgba(0, 0, 0, .8);
 }
 
 .after {
