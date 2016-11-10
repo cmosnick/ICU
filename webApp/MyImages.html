@@ -31,7 +31,7 @@
     </header>
     
    <div class="MainContent">
-        <section class="SignUpSection">
+        <section class="FirstSection">
             <h1 class="IntroHeading">My Images</h1>
             <div class="images" id="imageContainer">
 
@@ -45,22 +45,11 @@
     </footer>
 </body>
 <script>
-	$.get("http://icu.services:5000/image/info/user/id/2",
-	{	
-	},
-	function(data, status){		
-		var html = "";
-		
-		for(var i = 0; i < data.length; i++)
-		{
-			var timestamp = data[i].date_time;
-			var imageURL = data[i].image;
-			
-			html += '<div class="imgContainer"><a target="_blank" href="' + imageURL + '"><img src="' + 'images/test1.png' + '" alt="Logo"><div class="after">' + timestamp + '</div></a></div>';
-		}
-		
-		$('#imageContainer').html(html);
-		
+	$(function() 
+	{
+		var htmlId = "imageContainer";
+		var userId = 2;
+		getImages(userId, htmlId);
 	});
 </script>
 </html>
