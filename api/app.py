@@ -113,6 +113,15 @@ def login():
     except Exception as e:
         return internal_error(e)
 
+# logs a user in
+@app.route('/user/logout')
+def logout():
+    try:
+        session.pop('username', None)
+
+    except Exception as e:
+        return internal_error(e)
+
 # Add a user
 @app.route('/user/add/', methods = ['POST'])
 def add_user():
