@@ -314,6 +314,13 @@ footer{
     margin: 0px 5px;
     margin-bottom: 10px;
 }
+.TextboxLableContainer2{
+    box-sizing: border-box;
+    width:calc(100% / 2 - 13px);
+    display: inline-block;
+    margin: 0px 5px;
+    margin-bottom: 10px;
+}
 .TextboxLableContainer1{
     box-sizing: border-box;
     width:calc(100% - 13px);
@@ -321,7 +328,14 @@ footer{
     margin: 0px 5px;
     margin-bottom: 10px;
 }
+
 .TextboxLableContainer3 label{
+    font-family: open sans, sans-serif;
+    color:#414042;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.TextboxLableContainer2 label{
     font-family: open sans, sans-serif;
     color:#414042;
     text-transform: uppercase;
