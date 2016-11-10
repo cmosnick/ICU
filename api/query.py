@@ -3,7 +3,7 @@ import json
 from database import db, engine
 from models import *
 from sqlalchemy.orm import create_session, sessionmaker
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, DateTime
 
 
 Session = sessionmaker(bind=engine)
@@ -54,8 +54,8 @@ def update_user_settings(user_id, update_fields):
 def add_user_settings(user_settings_info):
     session = Session()
     user_settings = SQLAUserSetting(
-        user_id = user_settings_info['user_id'],
-        notification_option_id = user_settings_info['notification_option_id'],
+        user_id = int(user_settings_info['user_id']),
+        notification_option_id = int(user_settings_info['notification_option_id']),
         start_time = user_settings_info['start_time'],
         end_time = user_settings_info['end_time']
     )
@@ -79,7 +79,7 @@ def add_user(user_info):
         )
         session.add(user)
         session.commit()
-        return user.to_dict()
+        return user.user_id
     except Exception as e:
         return False
 
@@ -120,11 +120,13 @@ def get_all_not_opts():
     return session.query(SQLANotOpts).order_by(SQLANotOpts.notification_id).all()
 
 
+# TODO: change to all()? There can be multiple options per user
 def get_user_settings(setting_id = None, user_id = None):
     session = Session()
     if setting_id is not None:
         return session.query(SQLAUserSetting).filter_by(setting_id=setting_id).first()
     if user_id is not None:
+        print "here"
         return session.query(SQLAUserSetting).filter_by(user_id=user_id).first()
 
 

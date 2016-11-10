@@ -32,6 +32,9 @@ def internal_error(e):
 def error_message(message):
     return jsonify({"Error": message}), 400
 
+def success_message(message):
+    return jsonify({"Success": message}), 200
+
 ################
 ################
 # SETUP ROUTES #
@@ -102,7 +105,7 @@ def add_user():
             email = request.form.get('email')
             
 
-            sql_user = query.add_user({
+            user_id = query.add_user({
                 "first_name" : first_name,
                 "last_name" : last_name,
                 "device_id" : device_id,
@@ -111,12 +114,12 @@ def add_user():
                 "phone_number" : phone_number,
                 "email" : email
             })
-            user = User(sql_user)
-            user_id = user.to_dict()['user_id']
             if user_id >= 0:
                 # Add default notification settings for user
                 add_default_user_settings(user_id)
-                return user_id
+                return success_message("Added user " + str(user_id))
+            else:
+                return error_message("Could not add user")
         else:
             return error_message("POST required for user insertion")
     except Exception as e:
@@ -124,11 +127,12 @@ def add_user():
 
 @app.route('/user/add/settings_test/', methods = ['GET'])
 def add_default_user_settings(user_id = 5):
+    print "here"
     return add_user_settings({
-        "notification_option_id" : 3,
+        "notification_option_id" : 1,
         "user_id" : 5,
-        "start_time" : datetime.datetime.strptime("00:00", '%H:%M').time(),
-        "end_time" : datetime.datetime.strptime("23:59", '%H:%M').time()
+        "start_time" : "00:00",
+        "end_time" : "23:59"
         })
 
 # Add user settings
@@ -141,7 +145,7 @@ def add_user_settings(params = None):
         else:
             # TODO: check if this works?
             # TODO: decide if notification_option id should be the enum string instead "text", "email", "both"
-            name = request.form.get('notification_option_id')
+            # name = request.form.get('notification_option_id')
             return query.add_user_settings({
                 "user_id" : request.form.get('user_id'),
                 "notification_option_id" : request.form.get('notification_option_id'),
@@ -250,6 +254,7 @@ def get_user_settings(username = None, user_id = None, setting_id = None):
         if user_id is not None:
             # Get notification settings for user_id
             sql_user_settings = query.get_user_settings(None, user_id)
+            print sql_user_settings
             if sql_user_settings is not None:
                 user_settings = UserSetting(sql_user_settings)
                 return user_settings.to_json()
