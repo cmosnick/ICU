@@ -1,8 +1,5 @@
 function signUp()
 {
-	console.log($("#fname").val());
-
-	//this route will most likely need to change, revisit once the API is up
 	$.post("http://icu.services:5000/user/add/",
 	{
 		first_name: $("#fname").val(),
