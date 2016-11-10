@@ -22,7 +22,7 @@ function signUp()
 			function(data, status){		
 				if(status === 'success')
 				{
-					window.location.href = "http://icu.services/dashboard.html"
+					window.location.href = "http://icu.services/Dashboard.html"
 				}
 			});
 		}
@@ -44,7 +44,7 @@ function login()
 			function(data, status){
 				if(status === 'success')
 				{
-					window.location.href = "http://icu.services/dashboard.html"
+					window.location.href = "http://icu.services/Dashboard.html"
 				}
 			});
 	});
