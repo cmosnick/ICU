@@ -5,7 +5,7 @@
 #
 # TODO: add custom 404 message / page
 
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, session
 from flask_cors import CORS, cross_origin
 from utility import *
 from database import db
