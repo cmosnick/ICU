@@ -93,7 +93,7 @@ def get_all_users():
         return internal_error(e)
 
 # logs a user in
-@app.route('/user/login', methods = ["POST"])
+@app.route('/user/login/', methods = ["POST"])
 def login():
     try:
         if request.method == 'POST':
