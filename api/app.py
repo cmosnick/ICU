@@ -325,15 +325,33 @@ def get_user_settings(username = None, user_id = None, setting_id = None):
 @app.route('/image/id/', methods = ['GET'])
 @app.route('/image/id/<int:image_id>', methods = ['GET'])
 def get_image(image_id = None):
+    # try:
+    #     if image_id is not None:
+    #         info = get_image_info(image_id)
+    #         filename = info.image
+    #         # Todo: complete the actual sending of the image
+    #         return send_file(filename, )
+
+    #     else:
+    #         return error_message("Please specify image_id")
+    # except Exception as e:
+    #     return internal_error(e)
     try:
         if image_id is not None:
-            info = get_image_info(image_id)
-            filename = info.image
-            # Todo: complete the actual sending of the image
-            return send_file(filename, )
-
+            # Get filename
+            image_info = query.get_image_info(image_id)
+            if image_info is not None:
+                filename =  app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
+                print filename
+                if ((filename is not None) and (os.path.isfile(filename)) ):
+                    # send file
+                    return send_file(filename, mimetype='image/jpeg')
+                else:
+                    return error_message("Image not found")
+            else:
+                return error_message("No image found for image_id")       
         else:
-            return error_message("Please specify image_id")
+            return error_message("Please include image_id or post array of image_ids")
     except Exception as e:
         return internal_error(e)
 
@@ -430,30 +448,28 @@ def upload_file(device_id = None):
         return internal_error(e)
 
 
-# Route to retrieve image(s) by id. Can receive filename or json array of filenames
-@app.route('/image/file/id/<int:image_id>', methods=['GET'])
-# @app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
-def download(image_id=None):
-    try:
-        if image_id is not None:
-            # Get filename
-            image_info = query.get_image_info(image_id)
-            if image_info is not None:
-                filename = app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
-                print filename
-                if ((filename is not None) and (os.path.isfile(filename)) ):
-                    # send file
-                    return send_file(filename, mimetype='image/jpeg')
-                else:
-                    return error_message("Image not found")
-            else:
-                return error_message("No image found for image_id")       
-
-            # return image_id
-        else:
-            return error_message("Please include image_id or post array of image_ids")
-    except Exception as e:
-        return internal_error(e)
+# # Route to retrieve image(s) by id. Can receive filename or json array of filenames
+# @app.route('/image/file/id/<int:image_id>', methods=['GET', 'POST'])
+# # @app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
+# def download_image(image_id=None):
+#     try:
+#         if image_id is not None:
+#             # Get filename
+#             image_info = query.get_image_info(image_id)
+#             if image_info is not None:
+#                 filename = app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
+#                 print filename
+#                 if ((filename is not None) and (os.path.isfile(filename)) ):
+#                     # send file
+#                     return send_file(filename, mimetype='image/jpeg')
+#                 else:
+#                     return error_message("Image not found")
+#             else:
+#                 return error_message("No image found for image_id")       
+#         else:
+#             return error_message("Please include image_id or post array of image_ids")
+#     except Exception as e:
+#         return internal_error(e)
 
 
 
