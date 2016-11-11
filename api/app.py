@@ -106,7 +106,7 @@ def login():
             	"password" : password
             })
             if sqlaUser is not None:
-                session['username'] = username
+                #session['username'] = username
                 session['login'] = True
                 return success_message("The user has successfully logged in")
             else:
@@ -154,7 +154,7 @@ def add_user():
                 "email" : email
             })
             if user_id >= 0:
-            	session['username'] = username
+            	#session['username'] = username
             	session['login'] = True
                 # Add default notification settings for user
                 print "here"
