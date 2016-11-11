@@ -21,13 +21,13 @@ def add(obj):
 def get_user(user_id=None, username=None, device_id=None):
     session = Session()
     if user_id is not None:
-        # print user_id
+        print user_id
         return session.query(SQLAUser).filter_by(user_id=user_id).first()
     elif username is not None:
-        # print username
+        print username
         return session.query(SQLAUser).filter_by(username=username).first()
     elif device_id is not None:
-        # print device_id
+        print device_id
         return session.query(SQLAUser).filter_by(device_id=device_id).first()
     else:
         raise Exception("Could not retrieve user")
@@ -81,6 +81,7 @@ def add_user(user_info):
     session.add(user)
     session.flush()
     session.refresh(user)
+    session.commit()
     return user.user_id
 
 

@@ -1,3 +1,5 @@
+# This file is no longer in use in the app.  
+# It is here for reference in case some functions awere not copied into other files when broken up.
 from flask import jsonify, request, send_file, session, Blueprint
 from app.utility import *
 from app.database import db
