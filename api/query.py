@@ -81,7 +81,8 @@ def add_user(user_info):
             email = user_info['email']
         )
         session.add(user)
-        session.commit()
+        session.flush()
+        session.refresh()
         return user.user_id
     except Exception as e:
         return False

@@ -142,7 +142,9 @@ def add_user():
             })
             if user_id >= 0:
                 # Add default notification settings for user
+                print "here"
                 add_default_user_settings(user_id)
+                print "here2"
                 return success_message("Added user " + str(user_id))
             else:
                 return error_message("Could not add user")
