@@ -1,12 +1,11 @@
 from flask import jsonify
-import config
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import create_engine
-from database import engine
+from app.database import engine
+
+
 
 # Auto map databse tables into sqlalchemy objects
 Base = automap_base()
-# engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
 Base.prepare(engine, reflect=True)
 
 # Name the Sqlalchemy classes

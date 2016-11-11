@@ -1,16 +1,12 @@
-# TODO: prune unnecessary imports
 from flask import jsonify, request, send_file, session, Blueprint
 from app.utility import *
 from app.database import db
 from app.models import *
 import app.query as query
-# import config
+from app.routing_utils import *
 import os
 from werkzeug.utils import secure_filename
 import uuid
-from sqlalchemy import DateTime
-import datetime
-from app.routing_utils import *
 
 
 # Declare blueprint name api
