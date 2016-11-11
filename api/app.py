@@ -522,12 +522,11 @@ def get_logs_by_user(user_id = None, username = None):
 ##################################
 
 # Checks if a session exists
-@app.route('/session/username/<username>', methods = ['GET'])
+@app.route('/session/username/', methods = ['GET'])
 def check_session(username = None):
     try:
         if session.get('username'):
-    		if session['username'] == username:
-    			return success_message("The session exists")
+    		return success_message("The session exists")
         else:
             return error_message("The session does not exist")
     except Exception as e:

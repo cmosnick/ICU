@@ -1,3 +1,15 @@
+function checkSession(){
+	//if a current session already exists for the username, redirect to the dashboard
+	$.get("http://icu.services:5000/session/",
+	{},
+	function(data, status){		
+		if(status === 'success')
+		{
+			window.location.href = "http://icu.services/Dashboard.html"
+		}
+	})
+}
+
 function signUp()
 {
 	$.post("http://icu.services:5000/user/add/",
