@@ -8,7 +8,7 @@ function checkSession(){
 		{
 			window.location.href = "http://icu.services/Dashboard.html"
 		}
-	})
+	});
 }
 
 function signUp()

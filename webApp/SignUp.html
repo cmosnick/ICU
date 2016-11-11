@@ -80,7 +80,14 @@
 	$(".SubmitBtn").click(signUp);
 
     $(document).ready(function(){
-        checkSession();
+        $.get("http://icu.services:5000/session/",
+        {},
+        function(data, status){     
+            if(status === 'success')
+            {
+                window.location.href = "http://icu.services/Dashboard.html"
+            }
+        });
     });
 </script>
 </html>
