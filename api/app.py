@@ -107,9 +107,9 @@ def login():
             })
             if sqlaUser is not None:
                 #session['username'] = username
+                #session['login'] = True
             	resp = make_response(render_template('Dashboard.html'))
    				resp.set_cookie('login', True)
-                #session['login'] = True
                 return success_message("The user has successfully logged in")
             else:
                 return error_message("Could not retrieve user")
