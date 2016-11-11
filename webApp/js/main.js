@@ -57,13 +57,15 @@ function getImages(userId, htmlId)
 	},
 	function(data, status){		
 		var html = "";
-		
+		var baseImageUrl = "http://icu.services:5000/image/file/id/";
 		for(var i = 0; i < data.length; i++)
 		{
 			var timestamp = data[i].date_time;
-			var imageURL = data[i].image;
+			var image_id = data[i].image_id;
+			var imageURL = baseImageUrl + image_id;
 			
-			html += '<div class="imgContainer"><a target="_blank" href="' + imageURL + '"><img src="' + 'images/test1.png' + '" alt="Logo"><div class="after">' + timestamp + '</div></a></div>';
+			// TODO: convert timestamp into nice format, insert src url
+			html += '<div class="imgContainer"><a target="_blank" href="' + imageURL + '"><img src="' + imageURL + '" alt="Logo"><div class="after">' + timestamp + '</div></a></div>';
 		}
 		
 		$('#' + htmlId).html(html);

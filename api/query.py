@@ -41,6 +41,7 @@ def get_user_id(username):
     session = Session()
     return session.query(SQLAUser).with_entities(SQLAUser.user_id).filter_by(username = username).first()
 
+# TODO: hash password?
 def login(user):
     session = Session()
     return session.query(SQLAUser).filter_by(username = user["username"], password = user["password"]).first()
@@ -67,25 +68,21 @@ def add_user_settings(user_settings_info):
     return "Added: " + json.dumps(user_settings_info)
 
 
-# TODO: finish this.  Is this not finished?
 def add_user(user_info):
-#    try:
-        session = Session()
-        user = SQLAUser(
-            device_id = user_info['device_id'],
-            first_name = user_info['first_name'],
-            last_name = user_info['last_name'],
-            username = user_info['username'],
-            password = user_info['password'],
-            phone_number = user_info['phone_number'],
-            email = user_info['email']
-        )
-        session.add(user)
-        session.flush()
-        session.refresh(user)
-        return user.user_id
- #   except Exception as e:
-  #      return False
+    session = Session()
+    user = SQLAUser(
+        device_id = user_info['device_id'],
+        first_name = user_info['first_name'],
+        last_name = user_info['last_name'],
+        username = user_info['username'],
+        password = user_info['password'],
+        phone_number = user_info['phone_number'],
+        email = user_info['email']
+    )
+    session.add(user)
+    session.flush()
+    session.refresh(user)
+    return user.user_id
 
 
 def add_log(log_info):
@@ -130,7 +127,6 @@ def get_user_settings(setting_id = None, user_id = None):
     if setting_id is not None:
         return session.query(SQLAUserSetting).filter_by(setting_id=setting_id).first()
     if user_id is not None:
-        print "here"
         return session.query(SQLAUserSetting).filter_by(user_id=user_id).first()
 
 
@@ -140,7 +136,6 @@ def get_log(log_id):
 
 
 def add_image_info(imageInfo):
-    print "here"
     session = Session()
     info = SQLAImage(
         user_id = imageInfo['user_id'],

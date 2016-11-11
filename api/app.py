@@ -17,7 +17,6 @@ from werkzeug.utils import secure_filename
 import uuid
 from sqlalchemy import DateTime
 import datetime
-import os
 
 
 app = Flask(__name__)
@@ -93,7 +92,8 @@ def get_all_users():
         return internal_error(e)
 
 # logs a user in
-@app.route('/user/login', methods = ["POST"])
+# TODO: hash password
+@app.route('/user/login/', methods = ["POST"])
 def login():
     try:
         if request.method == 'POST':
@@ -431,15 +431,25 @@ def upload_file(device_id = None):
 
 
 # Route to retrieve image(s) by id. Can receive filename or json array of filenames
-@app.route('/image/file/', methods=['POST'])
-@app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
+@app.route('/image/file/id/<int:image_id>', methods=['GET'])
+# @app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
 def download(image_id=None):
     try:
-        if ((image_id is None) and (request.method == 'POST')):
-            return "Thanks for posting"
-        elif image_id is not None:
-            # check if filename exists
-            return image_id
+        if image_id is not None:
+            # Get filename
+            image_info = query.get_image_info(image_id)
+            if image_info is not None:
+                filename = app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
+                print filename
+                if ((filename is not None) and (os.path.isfile(filename)) ):
+                    # send file
+                    return send_file(filename, mimetype='image/jpeg')
+                else:
+                    return error_message("Image not found")
+            else:
+                return error_message("No image found for image_id")       
+
+            # return image_id
         else:
             return error_message("Please include image_id or post array of image_ids")
     except Exception as e:
