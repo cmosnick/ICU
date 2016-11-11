@@ -1,4 +1,5 @@
 //if a current session already exists for the username, redirect to the dashboard
+// TODO: FIX THIS SO IT DOESN'T ACT DUMB
 function checkSession(){
 	
 	$.get("http://icu.services:5000/session/",
@@ -9,6 +10,11 @@ function checkSession(){
 			window.location.href = "http://icu.services/Dashboard.html"
 		}
 	});
+}
+
+/* TODO: add log functionality, call the api logout function */
+function logout(){
+	window.location.href = "http://icu.services/index.html";
 }
 
 function signUp()
