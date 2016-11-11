@@ -223,7 +223,7 @@ def update_user_settings():
             	return error_message("Must specify user_id to update")
 
     	except Exception as e:
-            return internal_error(e)
+        	return internal_error(e)
     else:
         return error_message("POST required for user insertion")
 
