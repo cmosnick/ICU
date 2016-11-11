@@ -69,7 +69,7 @@ def add_user_settings(user_settings_info):
 
 # TODO: finish this.  Is this not finished?
 def add_user(user_info):
-    try:
+#    try:
         session = Session()
         user = SQLAUser(
             device_id = user_info['device_id'],
@@ -82,10 +82,10 @@ def add_user(user_info):
         )
         session.add(user)
         session.flush()
-        session.refresh()
+        session.refresh(user)
         return user.user_id
-    except Exception as e:
-        return False
+ #   except Exception as e:
+  #      return False
 
 
 def add_log(log_info):
