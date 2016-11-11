@@ -1,5 +1,6 @@
+//if a current session already exists for the username, redirect to the dashboard
 function checkSession(){
-	//if a current session already exists for the username, redirect to the dashboard
+	
 	$.get("http://icu.services:5000/session/",
 	{},
 	function(data, status){		
