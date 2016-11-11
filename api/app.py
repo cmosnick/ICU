@@ -107,7 +107,7 @@ def login():
             })
             if sqlaUser is not None:
                 session['username'] = username
-                return "success"
+                return success_message("The user has successfully logged in")
             else:
                 return error_message("Could not retrieve user")
         else:
@@ -117,11 +117,14 @@ def login():
         return internal_error(e)
 
 # logs a user out
-@app.route('/user/logout')
+@app.route('/user/logout/username/<username>', methods = ['GET'])
 def logout():
     try:
-        session.pop('username', None)
-
+    	if(check_session(username) == "success"):
+	        session.pop('username', None)
+	        return success_message("The user has successfully logged out")
+	    else:
+	    	return error_message("The user is not logged in. Logout unsuccessful.")
     except Exception as e:
         return internal_error(e)
 
@@ -513,6 +516,22 @@ def get_logs_by_user(user_id = None, username = None):
     except Exception as e:
         return internal_error(e)
 
+
+##################################
+		# SESSION CHECKING #
+##################################
+
+# Checks if a session exists
+@app.route('/session/username/<username>', methods = ['GET'])
+def check_session(username = None):
+    try:
+        if session.get('username'):
+    		if session['username'] == username:
+    			return success_message("The session exists")
+        else:
+            return error_message("The session does not exist")
+    except Exception as e:
+        return internal_error(e)
 
 
 # Start app finally
