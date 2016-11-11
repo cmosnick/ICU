@@ -5,7 +5,7 @@
 #
 # TODO: add custom 404 message / page
 
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, session
 from flask_cors import CORS, cross_origin
 from utility import *
 from database import db
@@ -116,6 +116,15 @@ def login():
     except Exception as e:
         return internal_error(e)
 
+# logs a user out
+@app.route('/user/logout')
+def logout():
+    try:
+        session.pop('username', None)
+
+    except Exception as e:
+        return internal_error(e)
+
 # Add a user
 @app.route('/user/add/', methods = ['POST'])
 def add_user():
@@ -141,6 +150,7 @@ def add_user():
                 "email" : email
             })
             if user_id >= 0:
+            	session['username'] = username
                 # Add default notification settings for user
                 print "here"
                 add_default_user_settings(user_id)
