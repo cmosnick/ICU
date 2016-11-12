@@ -96,11 +96,10 @@ def add_user():
                 "email" : email
             })
             if user_id >= 0:
+                # Add a session for user
                 session['username'] = username
                 # Add default notification settings for user
-                print "here"
                 settings.add_default_user_settings(user_id)
-                print "here2"
                 return success_message("Added user " + str(user_id))
             else:
                 return error_message("Could not add user")
