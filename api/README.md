@@ -5,6 +5,7 @@
 * [Notifications](#notification-settings-routes)
 * [User Settings](#user-settings-routes)
 * [Images](#image-routes)
+* [Authentication](#authentication)
 
 
 
@@ -32,7 +33,7 @@
 ```
 
 
-* __/users/all/__
+* __/user/all/__
   * GET all users (sanity check)
   ```
 [
@@ -193,4 +194,28 @@
    * content-type: application/x-www-form-urlencoded
   * body
    * file : \<file\>
+   
+* __/image/id/\<int:image_id\>__
+ * GET image from db by image_id
+
+```
+will send raw image
+```
+
+##Authentication
+
+* __/user/login/__
+ * POST login info with:
+  * username
+  * password
+  
+```
+```
+
+* __/user/logout/__
+ * Send GET request for logout
+ 
+ 
+* __/session/__
+ * GET info about session. If exists or not
  
