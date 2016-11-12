@@ -117,14 +117,14 @@ def login():
         return internal_error(e)
 
 # logs a user out
-@app.route('/user/logout/username/<username>', methods = ['GET'])
+@app.route('/user/logout/', methods = ['GET'])
 def logout():
     try:
-    	if(check_session(username) == "success"):
-	        session.clear()
+		if 'username' in session:
+			session.clear()
 	        return success_message("The user has successfully logged out")
-	    #else:
-	    	#return error_message("The user is not logged in. Logout unsuccessful.")
+	    else:
+	    	return error_message("The user is not logged in. Logout unsuccessful.")
     except Exception as e:
         return internal_error(e)
 
