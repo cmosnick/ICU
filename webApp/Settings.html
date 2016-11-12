@@ -54,27 +54,39 @@
 <script>
 	var numRows = 0;
 
-	$.get("http://icu.services:5000/user_settings/id/5",
+	$.get("http://icu.services:5000/user_settings/id/7",
 	{	
 	},
 	function(data, status){
 		console.log(data);
-		for(var i = 0; i < data.length; i++)
+		for(var i = 0; i < 2; i++)
 		{
 			var startTime = data[i].start_time.substring(0, data[i].start_time.length - 3);
 			var endTime = data[i].end_time.substring(0, data[i].end_time.length - 3);
 			var notifyBy = data[i].notification_option_id;
 			
+			if(startTime.charAt(0) == 0){
+				startTime = startTime.substring(1, startTime.length);
+			}
+			
+			if(endTime.charAt(0) == 0){
+				endTime = endTime.substring(1, endTime.length);
+			}
+			
+			writeTime(startTime, endTime);
+		}
+		
+		function writeTime(startTime, endTime){
 			$("#notificationContainer").css("visibility", "visible");
 			$("#notificationContainer").append('<div class="loadHtml margin30"></div>');
-			$(".loadHtml:last").load("notification.html");
-			
-			$('#startTime').("color", "red" );
-			$('#endTime option[value="'+ endTime +'"]').attr('selected', 'selected');
-			$('#notify option:eq(' + notifyBy + ')').attr('selected', 'selected');
-			
-			numRows++;
+			$(".loadHtml:last").load("notification.html", function(){
+				console.log(startTime);
+				console.log(endTime);
+				$('#startTime').val(startTime);
+				$('#endTime').val(endTime);
+			});
 		}
+		
 	});
 		
 	$("#addButton").click(function(){
