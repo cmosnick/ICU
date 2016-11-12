@@ -74,7 +74,7 @@ def add_user(user_info):
         first_name = user_info['first_name'],
         last_name = user_info['last_name'],
         username = user_info['username'],
-        password = user_info['password'],
+        hash = user_info['hash'],
         phone_number = user_info['phone_number'],
         email = user_info['email']
     )
