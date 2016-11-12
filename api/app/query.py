@@ -51,7 +51,7 @@ def update_user_settings(user_id, update_fields):
         print field_w_value
         session.query(SQLAUserSetting).filter_by(user_id = user_id).update(field_w_value)
     session.commit()
-    return "Updated: " + str(user_id)
+    return str(user_id)
 
 
 def add_user_settings(user_settings_info):
@@ -64,7 +64,7 @@ def add_user_settings(user_settings_info):
     )
     session.add(user_settings)
     session.commit()
-    return "Added: " + jsonify(user_settings_info)
+    return jsonify(user_settings_info)
 
 
 def add_user(user_info):
@@ -93,7 +93,7 @@ def add_log(log_info):
     )
     session.add(log)
     session.commit()
-    return "Added: " + jsonify(log_info)
+    return jsonify(log_info)
 
 
 def get_logs_by_user(user_id=None, username=None):
@@ -143,7 +143,7 @@ def add_image_info(imageInfo):
     )
     session.add(info)
     session.commit()
-    return "Added: " + jsonify(imageInfo)
+    return jsonify(imageInfo)
 
 
 def get_image_info(image_id):
