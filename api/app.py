@@ -525,7 +525,6 @@ def get_logs_by_user(user_id = None, username = None):
 @app.route('/session/', methods = ['GET'])
 def check_session():
     try:
-        #if (request.cookies.get('login') == True):
         if 'username' in session:
     		return success_message("The session exists")
         else:
