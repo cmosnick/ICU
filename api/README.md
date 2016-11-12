@@ -32,7 +32,7 @@
 ```
 
 
-* __/users/all/__
+* __/user/all/__
   * GET all users (sanity check)
   ```
 [
@@ -193,4 +193,13 @@
    * content-type: application/x-www-form-urlencoded
   * body
    * file : \<file\>
+   
+* __/image/id/\<int:image_id\>__
+ * GET image from db by image_id
+
+```
+will send raw image
+```
+
+
  
