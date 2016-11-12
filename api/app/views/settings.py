@@ -7,6 +7,8 @@ from app.routing_utils import *
 import os
 from werkzeug.utils import secure_filename
 import uuid
+import datetime
+
 
 
 # Declare blueprint name api
@@ -25,13 +27,13 @@ def add_default_user_settings(user_id = 5):
     print "here"
     return add_user_settings({
         "notification_option_id" : 1,
-        "user_id" : 5,
-        "start_time" : "00:00",
-        "end_time" : "23:59"
+        "user_id" : user_id,
+        "start_time" : datetime.datetime.strptime("00:00", '%H:%M').time(),
+        "end_time" : datetime.datetime.strptime("23:59", '%H:%M').time()
     })
 
 # Add user settings
-@settings.route('/user_settings/add/', methods = ['POST'])
+@settings.route('/user_settings/add/', methods = ['GET', 'POST'])
 def add_user_settings(params = None):
     try:
         if params is not None:
