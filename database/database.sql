@@ -54,7 +54,7 @@ CREATE TABLE users (
   last_name VARCHAR(40) NOT NULL,
   -- TODO: make username unique
   username VARCHAR(20) NOT NULL,
-  password VARCHAR(20) NOT NULL,
+  hash VARCHAR(32) NOT NULL,
   phone_number VARCHAR(11) NOT NULL,
   email VARCHAR(50) NOT NULL,
   PRIMARY KEY (user_id, device_id)

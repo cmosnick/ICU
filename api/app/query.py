@@ -43,7 +43,7 @@ def get_user_id(username):
 # TODO: hash password?
 def login(user):
     session = Session()
-    return session.query(SQLAUser).filter_by(username = user["username"], password = user["password"]).first()
+    return session.query(SQLAUser).filter_by(username = user["username"]).first()
 
 def update_user_settings(user_id, update_fields):
     session = Session()
