@@ -11,7 +11,7 @@
   <style type="text/css">
   </style>
 </head>
-<body>
+<body onload="hasSession();">
     <header class="Header">
         <div class="GrayBar">
             <div class="GrayBarContents">
@@ -59,9 +59,5 @@
 </body>
 <script>
 	$(".SubmitBtn").click(login);
-
-    $(document).ready(function(){
-        hasSession();
-    });
 </script>
 </html>
