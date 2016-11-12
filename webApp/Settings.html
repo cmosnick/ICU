@@ -61,13 +61,13 @@
 	});
 	
 	var numRows = 0;
-	var notificationHTML = '<div class="margin10"></div>';
+	var notificationHTML = '<div class="loadHtml margin10"></div>';
 					
 		
 	$("#addButton").click(function(){
 		$("#notificationContainer").css("visibility", "visible");
 		$("#notificationContainer").append(notificationHTML);
-		$("#notificationContainer:last").load("notification.html");
+		$(".loadHtml:last").load("notification.html");
 	});
 	
 	$("#saveButton").click(function(){
