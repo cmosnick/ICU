@@ -99,6 +99,6 @@ def create_user_settings_for_user(user_id=1):
 
 
 if __name__ == '__main__':
-    # create_users()
-    # create_images()
+    create_users()
+    create_images()
     create_all_user_settings()
