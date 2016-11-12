@@ -5,7 +5,7 @@
 #
 # TODO: add custom 404 message / page
 
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, session, make_response
 from flask_cors import CORS, cross_origin
 from utility import *
 from database import db
@@ -23,6 +23,7 @@ app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 CORS(app)
+app.secret_key = os.urandom(24)
 
 
 # Create error messages
@@ -31,6 +32,9 @@ def internal_error(e):
 
 def error_message(message):
     return jsonify({"Error": message}), 400
+
+def success_message(message):
+    return jsonify({"Success": message}), 200
 
 ################
 ################
@@ -87,6 +91,43 @@ def get_all_users():
     except Exception as e:
         return internal_error(e)
 
+# logs a user in
+# TODO: hash password
+@app.route('/user/login/', methods = ["POST"])
+def login():
+    try:
+        if request.method == 'POST':
+        # TODO: check all fields are in request before accessing request args
+            username = request.form.get('username')
+            password = request.form.get('password')            
+
+            sqlaUser = query.login({
+            	"username" : username, 
+            	"password" : password
+            })
+            if sqlaUser is not None:
+                session['username'] = username
+                return success_message("The user has successfully logged in")
+            else:
+                return error_message("Could not retrieve user")
+        else:
+            return error_message("POST required for user insertion")
+
+    except Exception as e:
+        return internal_error(e)
+
+# logs a user out
+@app.route('/user/logout/username/<username>', methods = ['GET'])
+def logout():
+    try:
+    	if(check_session(username) == "success"):
+	        session.clear()
+	        return success_message("The user has successfully logged out")
+	    #else:
+	    	#return error_message("The user is not logged in. Logout unsuccessful.")
+    except Exception as e:
+        return internal_error(e)
+
 # Add a user
 @app.route('/user/add/', methods = ['POST'])
 def add_user():
@@ -102,7 +143,7 @@ def add_user():
             email = request.form.get('email')
             
 
-            sql_user = query.add_user({
+            user_id = query.add_user({
                 "first_name" : first_name,
                 "last_name" : last_name,
                 "device_id" : device_id,
@@ -111,12 +152,15 @@ def add_user():
                 "phone_number" : phone_number,
                 "email" : email
             })
-            user = User(sql_user)
-            user_id = user.to_dict()['user_id']
             if user_id >= 0:
+            	session['username'] = username
                 # Add default notification settings for user
+                print "here"
                 add_default_user_settings(user_id)
-                return user_id
+                print "here2"
+                return success_message("Added user " + str(user_id))
+            else:
+                return error_message("Could not add user")
         else:
             return error_message("POST required for user insertion")
     except Exception as e:
@@ -124,11 +168,12 @@ def add_user():
 
 @app.route('/user/add/settings_test/', methods = ['GET'])
 def add_default_user_settings(user_id = 5):
+    print "here"
     return add_user_settings({
-        "notification_option_id" : 3,
+        "notification_option_id" : 1,
         "user_id" : 5,
-        "start_time" : datetime.datetime.strptime("00:00", '%H:%M').time(),
-        "end_time" : datetime.datetime.strptime("23:59", '%H:%M').time()
+        "start_time" : "00:00",
+        "end_time" : "23:59"
         })
 
 # Add user settings
@@ -141,7 +186,7 @@ def add_user_settings(params = None):
         else:
             # TODO: check if this works?
             # TODO: decide if notification_option id should be the enum string instead "text", "email", "both"
-            name = request.form.get('notification_option_id')
+            # name = request.form.get('notification_option_id')
             return query.add_user_settings({
                 "user_id" : request.form.get('user_id'),
                 "notification_option_id" : request.form.get('notification_option_id'),
@@ -175,10 +220,10 @@ def update_user_settings():
                 return query.update_user_settings(user_id, update_fields)               
 
             else:
-                return error_message("Must specify user_id to update")
+            	return error_message("Must specify user_id to update")
 
-        except Exception as e:
-            return internal_error(e)
+    	except Exception as e:
+        	return internal_error(e)
     else:
         return error_message("POST required for user insertion")
 
@@ -250,6 +295,7 @@ def get_user_settings(username = None, user_id = None, setting_id = None):
         if user_id is not None:
             # Get notification settings for user_id
             sql_user_settings = query.get_user_settings(None, user_id)
+            print sql_user_settings
             if sql_user_settings is not None:
                 user_settings = UserSetting(sql_user_settings)
                 return user_settings.to_json()
@@ -282,15 +328,33 @@ def get_user_settings(username = None, user_id = None, setting_id = None):
 @app.route('/image/id/', methods = ['GET'])
 @app.route('/image/id/<int:image_id>', methods = ['GET'])
 def get_image(image_id = None):
+    # try:
+    #     if image_id is not None:
+    #         info = get_image_info(image_id)
+    #         filename = info.image
+    #         # Todo: complete the actual sending of the image
+    #         return send_file(filename, )
+
+    #     else:
+    #         return error_message("Please specify image_id")
+    # except Exception as e:
+    #     return internal_error(e)
     try:
         if image_id is not None:
-            info = get_image_info(image_id)
-            filename = info.image
-            # Todo: complete the actual sending of the image
-            return send_file(filename, )
-
+            # Get filename
+            image_info = query.get_image_info(image_id)
+            if image_info is not None:
+                filename =  app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
+                print filename
+                if ((filename is not None) and (os.path.isfile(filename)) ):
+                    # send file
+                    return send_file(filename, mimetype='image/jpeg')
+                else:
+                    return error_message("Image not found")
+            else:
+                return error_message("No image found for image_id")       
         else:
-            return error_message("Please specify image_id")
+            return error_message("Please include image_id or post array of image_ids")
     except Exception as e:
         return internal_error(e)
 
@@ -387,20 +451,28 @@ def upload_file(device_id = None):
         return internal_error(e)
 
 
-# Route to retrieve image(s) by id. Can receive filename or json array of filenames
-@app.route('/image/file/', methods=['POST'])
-@app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
-def download(image_id=None):
-    try:
-        if ((image_id is None) and (request.method == 'POST')):
-            return "Thanks for posting"
-        elif image_id is not None:
-            # check if filename exists
-            return image_id
-        else:
-            return error_message("Please include image_id or post array of image_ids")
-    except Exception as e:
-        return internal_error(e)
+# # Route to retrieve image(s) by id. Can receive filename or json array of filenames
+# @app.route('/image/file/id/<int:image_id>', methods=['GET', 'POST'])
+# # @app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
+# def download_image(image_id=None):
+#     try:
+#         if image_id is not None:
+#             # Get filename
+#             image_info = query.get_image_info(image_id)
+#             if image_info is not None:
+#                 filename = app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
+#                 print filename
+#                 if ((filename is not None) and (os.path.isfile(filename)) ):
+#                     # send file
+#                     return send_file(filename, mimetype='image/jpeg')
+#                 else:
+#                     return error_message("Image not found")
+#             else:
+#                 return error_message("No image found for image_id")       
+#         else:
+#             return error_message("Please include image_id or post array of image_ids")
+#     except Exception as e:
+#         return internal_error(e)
 
 
 
@@ -444,6 +516,22 @@ def get_logs_by_user(user_id = None, username = None):
     except Exception as e:
         return internal_error(e)
 
+
+##################################
+		# SESSION CHECKING #
+##################################
+
+# Checks if a session exists
+@app.route('/session/', methods = ['GET'])
+def check_session():
+    try:
+        #if (request.cookies.get('login') == True):
+        if 'username' in session:
+    		return success_message("The session exists")
+        else:
+            return error_message("The session does not exist")
+    except Exception as e:
+        return internal_error(e)
 
 
 # Start app finally

@@ -3,7 +3,7 @@ import json
 from database import db, engine
 from models import *
 from sqlalchemy.orm import create_session, sessionmaker
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, DateTime
 
 
 Session = sessionmaker(bind=engine)
@@ -41,6 +41,10 @@ def get_user_id(username):
     session = Session()
     return session.query(SQLAUser).with_entities(SQLAUser.user_id).filter_by(username = username).first()
 
+# TODO: hash password?
+def login(user):
+    session = Session()
+    return session.query(SQLAUser).filter_by(username = user["username"], password = user["password"]).first()
 
 def update_user_settings(user_id, update_fields):
     session = Session()
@@ -54,8 +58,8 @@ def update_user_settings(user_id, update_fields):
 def add_user_settings(user_settings_info):
     session = Session()
     user_settings = SQLAUserSetting(
-        user_id = user_settings_info['user_id'],
-        notification_option_id = user_settings_info['notification_option_id'],
+        user_id = int(user_settings_info['user_id']),
+        notification_option_id = int(user_settings_info['notification_option_id']),
         start_time = user_settings_info['start_time'],
         end_time = user_settings_info['end_time']
     )
@@ -64,24 +68,21 @@ def add_user_settings(user_settings_info):
     return "Added: " + json.dumps(user_settings_info)
 
 
-# TODO: finish this.  Is this not finished?
 def add_user(user_info):
-    try:
-        session = Session()
-        user = SQLAUser(
-            device_id = user_info['device_id'],
-            first_name = user_info['first_name'],
-            last_name = user_info['last_name'],
-            username = user_info['username'],
-            password = user_info['password'],
-            phone_number = user_info['phone_number'],
-            email = user_info['email']
-        )
-        session.add(user)
-        session.commit()
-        return user.to_dict()
-    except Exception as e:
-        return False
+    session = Session()
+    user = SQLAUser(
+        device_id = user_info['device_id'],
+        first_name = user_info['first_name'],
+        last_name = user_info['last_name'],
+        username = user_info['username'],
+        password = user_info['password'],
+        phone_number = user_info['phone_number'],
+        email = user_info['email']
+    )
+    session.add(user)
+    session.flush()
+    session.refresh(user)
+    return user.user_id
 
 
 def add_log(log_info):
@@ -120,6 +121,7 @@ def get_all_not_opts():
     return session.query(SQLANotOpts).order_by(SQLANotOpts.notification_id).all()
 
 
+# TODO: change to all()? There can be multiple options per user
 def get_user_settings(setting_id = None, user_id = None):
     session = Session()
     if setting_id is not None:
@@ -134,7 +136,6 @@ def get_log(log_id):
 
 
 def add_image_info(imageInfo):
-    print "here"
     session = Session()
     info = SQLAImage(
         user_id = imageInfo['user_id'],

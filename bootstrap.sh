@@ -9,17 +9,6 @@ if ! [ -L /var/www ]; then
 fi
 apache2ctl start
 
-# Install flask api
-printf "Y" | sudo apt-get install python-pip
-cd /vagrant/api
-sudo pip install Flask-API
-sudo pip install flask_sqlalchemy
-sudo pip install -U flask-cors
-sudo pip install pymysql
-chmod a+x app.py
-python app.py &
-cd ~
-
 
 # Setup database
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password pass"
@@ -37,6 +26,17 @@ sudo chmod 771 /database/images
 # copy sample images into directory
 sudo cp /vagrant/database/test_images/* /database/images/
 
+
+# Install flask api
+printf "Y" | sudo apt-get install python-pip
+cd /vagrant/api
+sudo pip install Flask-API
+sudo pip install flask_sqlalchemy
+sudo pip install -U flask-cors
+sudo pip install pymysql
+chmod a+x app.py
+python app.py &
+cd ~
 
 #  Install node
 sudo apt-get -y install curl
