@@ -52,6 +52,7 @@ def get_all_users():
 
 # Get user info by id or username
 # TODO: fix error message "Error: <username>. MAke more descriptive."
+# TODO : search in devices table for user_id instead of searching the users table
 @user.route('/id/<int:user_id>',  methods = ['GET'])
 @user.route('/device/<int:device_id>',  methods = ['GET'])
 @user.route('/<username>', methods = ['GET'])
@@ -76,6 +77,7 @@ def get_user(user_id = None, username = None, device_id=None):
 
 # Add a user
 # TODO: add sessions
+# TODO: get rid of device ID in users table
 @user.route('/add/', methods = ['POST'])
 def add_user():
     try:
