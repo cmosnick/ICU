@@ -35,7 +35,6 @@
     <div class="MainContent">
         <section class="FirstSection">
           <div class="MarketingContainer">
-            <h1 class="IntroHeading">Settings</h1><br/>
 			<div class="centerDiv">
 				<div class="notificationRule"> Take control of your home security by adding a notification rule.<br/> Provide a <b>start time</b>, <b>end time</b>, and <b>notification preference</b>. We'll take care of the rest!<br/>
 				<button id="addButton" class="ui-button ui-widget ui-corner-all"><b>Add </b></button>
@@ -53,20 +52,34 @@
     </footer>
 </body>
 <script>
+	var numRows = 0;
+
 	$.get("http://icu.services:5000/user_settings/id/5",
 	{	
 	},
-	function(data, status){		
+	function(data, status){
 		console.log(data);
+		for(var i = 0; i < data.length; i++)
+		{
+			var startTime = data[i].start_time.substring(0, data[i].start_time.length - 3);
+			var endTime = data[i].end_time.substring(0, data[i].end_time.length - 3);
+			var notifyBy = data[i].notification_option_id;
+			
+			$("#notificationContainer").css("visibility", "visible");
+			$("#notificationContainer").append('<div class="loadHtml margin30"></div>');
+			$(".loadHtml:last").load("notification.html");
+			
+			$('#startTime').("color", "red" );
+			$('#endTime option[value="'+ endTime +'"]').attr('selected', 'selected');
+			$('#notify option:eq(' + notifyBy + ')').attr('selected', 'selected');
+			
+			numRows++;
+		}
 	});
-	
-	var numRows = 0;
-	var notificationHTML = '<div class="loadHtml margin10"></div>';
-					
 		
 	$("#addButton").click(function(){
 		$("#notificationContainer").css("visibility", "visible");
-		$("#notificationContainer").append(notificationHTML);
+		$("#notificationContainer").append('<div class="loadHtml margin30"></div>');
 		$(".loadHtml:last").load("notification.html");
 	});
 	
