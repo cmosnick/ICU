@@ -8,6 +8,7 @@
 	the database from scratch everytime we run this script, we are deleting
 	all the foreign keys every time.
 */
+/*TODO: Drop foreign key constraint for unique in users*/
 delimiter $$
 DROP procedure IF EXISTS drop_keys;$$
 create procedure drop_keys()
@@ -27,6 +28,8 @@ THEN
   ALTER TABLE images DROP FOREIGN KEY images_ibfk_1;
   ALTER TABLE sent_images DROP FOREIGN KEY sent_images_ibfk_1;
   ALTER TABLE sent_images DROP FOREIGN KEY sent_images_ibfk_2;
+  ALTER TABLE devices DROP FOREIGN KEY devices_ibfk_1;
+
 END IF;
 
 end $$
@@ -48,15 +51,31 @@ call drop_keys();
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
 	user_id INTEGER AUTO_INCREMENT,
+  # TODO : get rid of device ID from this table
 	device_id INTEGER,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(40) NOT NULL,
-  -- TODO: make username unique
   username VARCHAR(20) NOT NULL UNIQUE,
   hash VARCHAR(50) NOT NULL,
   phone_number VARCHAR(11) NOT NULL,
   email VARCHAR(50) NOT NULL,
   PRIMARY KEY (user_id, device_id)
+);
+
+/*
+  Users are able to be attached to more than one device.
+
+  device_id is the id attached to a certain device
+  user_id is the id from the user table that connects that device to a user
+  the Primary Key is the device id since the device id is unique,
+  and also because a user can appear in the table more than once.
+*/
+DROP TABLE IF EXISTS devices CASCADE;
+CREATE TABLE devices (
+  device_id INTEGER AUTO_INCREMENT,
+  user_id INTEGER,
+  FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+  PRIMARY KEY(device_id)
 );
 
 /*
