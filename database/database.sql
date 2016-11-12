@@ -54,7 +54,7 @@ CREATE TABLE users (
   last_name VARCHAR(40) NOT NULL,
   -- TODO: make username unique
   username VARCHAR(20) NOT NULL UNIQUE,
-  hash VARCHAR(32) NOT NULL,
+  hash VARCHAR(50) NOT NULL,
   phone_number VARCHAR(11) NOT NULL,
   email VARCHAR(50) NOT NULL,
   PRIMARY KEY (user_id, device_id)
@@ -173,6 +173,12 @@ CREATE INDEX user_id_log_idx ON log(user_id);
 CREATE INDEX user_id_images_idx ON images(user_id);
 CREATE INDEX user_id_sent_images_idx ON sent_images(user_id);
 CREATE INDEX user_id_user_settings_idx ON user_settings(user_id);
+
+
+INSERT INTO notification_options VALUE (DEFAULT, "text");
+INSERT INTO notification_options VALUE (DEFAULT, "email");
+INSERT INTO notification_options VALUE (DEFAULT, "both");
+
 
 /*
   Creates triggers for the database

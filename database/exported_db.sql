@@ -164,7 +164,7 @@ CREATE TABLE `users` (
   `first_name` varchar(30) NOT NULL,
   `last_name` varchar(40) NOT NULL,
   `username` varchar(20) NOT NULL,
-  `hash` varchar(32) NOT NULL,
+  `hash` varchar(50) NOT NULL,
   `phone_number` varchar(11) NOT NULL,
   `email` varchar(50) NOT NULL,
   PRIMARY KEY (`user_id`,`device_id`)
