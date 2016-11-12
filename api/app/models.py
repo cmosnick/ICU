@@ -44,7 +44,7 @@ class CustomBase():
 
 # Customize for each table
 class User(CustomBase, SQLAUser):
-    fields = ["user_id", "device_id", "first_name", "last_name", "username", "password", "phone_number", "email"]
+    fields = ["user_id", "device_id", "first_name", "last_name", "username", "hash", "phone_number", "email"]
 
 
 class NotOpt(CustomBase, SQLANotOpts):

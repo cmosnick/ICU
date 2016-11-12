@@ -1,9 +1,19 @@
 import subprocess
 import random
 import requests
+from passlib.hash import md5_crypt
+
 
 NUM_USERS = 1000
 NUM_IMAGES = NUM_USERS * 10
+
+phone_numbers = [
+    "6363528647",
+    "6362845566",
+    "5734246735",
+    "6362299752",
+    "8159751442"
+]
 
 
 
@@ -25,9 +35,9 @@ def compose_user(device_id = None):
     lastname = name['lastname']
     username = firstname + "." + lastname
     # password is firstname
-    password = firstname
+    password = md5_crypt.encrypt(firstname)
     # random phone number
-    phone = "".join( (str(x) for x in random.sample(xrange(10), 10)) )
+    phone = random.choice(phone_numbers)
     email = firstname + "." + lastname + "@test.com"
 
     # insert into database
@@ -61,6 +71,7 @@ def create_image():
     sql = "\"INSERT INTO images value (DEFAULT, "+ str(user_id) +", '"+ filename +"', DEFAULT)\""
     send_mysql(sql)
 
+
 def create_all_user_settings():
     for user_id in range(0, NUM_USERS):
         create_user_settings_for_user(user_id)
@@ -88,6 +99,6 @@ def create_user_settings_for_user(user_id=1):
 
 
 if __name__ == '__main__':
-    # create_users()
-    # create_images()
-    # create_all_user_settings()
+    create_users()
+    create_images()
+    create_all_user_settings()
