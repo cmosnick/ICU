@@ -122,9 +122,9 @@ def logout():
     try:
 		if 'username' in session:
 			session.clear()
-	        return success_message("The user has successfully logged out")
-	    else:
-	    	return error_message("The user is not logged in. Logout unsuccessful.")
+			return success_message("The user has successfully logged out")
+		else:
+			return error_message("The user is not logged in. Logout unsuccessful.")
     except Exception as e:
         return internal_error(e)
 
