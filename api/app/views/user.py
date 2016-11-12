@@ -7,9 +7,12 @@ from app.routing_utils import *
 import os
 from werkzeug.utils import secure_filename
 import uuid
+from passlib.hash import md5_crypt
 
 import app.views.settings as settings
 import app.views.session as sessionView
+
+# from app import appSession
 
 # Declare blueprint name api
 user = Blueprint('user',__name__,template_folder='templates')
@@ -91,16 +94,16 @@ def add_user():
                 "last_name" : last_name,
                 "device_id" : device_id,
                 "username" : username,
-                "password" : password,
+                "hash" : md5_crypt.encrypt(password),
                 "phone_number" : phone_number,
                 "email" : email
             })
             if user_id >= 0:
-                session['username'] = username
+
+                #session['username'] = username
                 # Add default notification settings for user
-                print "here"
+                #print "here"
                 settings.add_default_user_settings(user_id)
-                print "here2"
                 return success_message("Added user " + str(user_id))
             else:
                 return error_message("Could not add user")
@@ -119,15 +122,19 @@ def login():
             username = request.form.get('username')
             password = request.form.get('password')            
 
+            hash = md5_crypt.encrypt(password)
+
             sqlaUser = query.login({
-              "username" : username, 
-              "password" : password
+              "username" : username
             })
 
             if sqlaUser is not None:
-	        session['username'] = username
-            	print "here3"
-		return success_message("User successfully logged in")
+                #session['username'] = username
+                #print "here3"
+                if md5_crypt.verify(__dict__["hash"], hash) is True:
+                    return success_message("User successfully logged in")
+                else:
+                    return error_message("User info inncorrect")
             else:
                 return error_message("Could not retrieve user")
         else:
@@ -141,7 +148,7 @@ def login():
 def logout():
     try:
         if(sessionView.check_session() == "success"):
-            session.pop("Username", None)
+            #session.pop("Username", None)
             return success_message("The user has successfully logged out")
         else:
             return error_message("The user is not logged in. Logout unsuccessful.")

@@ -43,7 +43,7 @@ def get_user_id(username):
 # TODO: hash password?
 def login(user):
     session = Session()
-    return session.query(SQLAUser).filter_by(username = user["username"], password = user["password"]).first()
+    return session.query(SQLAUser).filter_by(username = user["username"]).first()
 
 def update_user_settings(user_id, update_fields):
     session = Session()
@@ -127,7 +127,7 @@ def get_user_settings(setting_id = None, user_id = None):
     if setting_id is not None:
         return session.query(SQLAUserSetting).filter_by(setting_id=setting_id).first()
     if user_id is not None:
-        return session.query(SQLAUserSetting).filter_by(user_id=user_id).first()
+        return session.query(SQLAUserSetting).filter_by(user_id=user_id).all()
 
 
 def get_log(log_id):

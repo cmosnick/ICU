@@ -36,14 +36,17 @@ function hasNoSession(){
 
 /* TODO: add log functionality, call the api logout function */
 function logout(){
-	$.get("http://icu.services:5000/user/logout/",
+	/*$.get("http://icu.services:5000/user/logout/",
 	{},
 	function(data, status){		
 		if(status === 'success')
 		{
 			window.location.href = "http://icu.services/index.html";
 		}
-	});
+	});*/
+
+	window.location.href = "http://icu.services/index.html";
+
 }
 
 function signUp()
@@ -105,7 +108,7 @@ function getImages(userId, htmlId)
 	},
 	function(data, status){		
 		var html = "";
-		var baseImageUrl = "http://icu.services:5000/image/file/id/";
+		var baseImageUrl = "http://icu.services:5000/image/id/";
 		for(var i = 0; i < data.length; i++)
 		{
 			var timestamp = data[i].date_time;
