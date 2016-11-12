@@ -98,6 +98,7 @@ def get_images_by_user(user_id = None, username = None):
 ################
 
 # Add image to database
+# TODO : search in devices table for user_id instead of user tables
 @image.route('/add/', methods=['POST'])
 @image.route('/add/<int:device_id>', methods=['POST'])
 def upload_file(device_id = None):

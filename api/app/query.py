@@ -17,7 +17,8 @@ def add(obj):
         usersarray.append(SQLAUser)
     return jsonify(SQLAUser)
 
-
+# TODO : don't search for device id in users table
+# TODO : create function to look for device ID in devices table to retrieve user_id??
 def get_user(user_id=None, username=None, device_id=None):
     session = Session()
     if user_id is not None:
@@ -66,7 +67,7 @@ def add_user_settings(user_settings_info):
     session.commit()
     return jsonify(user_settings_info)
 
-
+#TODO : get rid of device id from this
 def add_user(user_info):
     session = Session()
     user = SQLAUser(
