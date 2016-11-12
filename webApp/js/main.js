@@ -108,7 +108,7 @@ function getImages(userId, htmlId)
 	},
 	function(data, status){		
 		var html = "";
-		var baseImageUrl = "http://icu.services:5000/image/file/id/";
+		var baseImageUrl = "http://icu.services:5000/image/id/";
 		for(var i = 0; i < data.length; i++)
 		{
 			var timestamp = data[i].date_time;
