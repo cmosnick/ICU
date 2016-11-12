@@ -39,8 +39,7 @@ call drop_keys();
   device_id is the identifier for the security system device
   first_name and last_name are simply the first and last names of the user
   username is the name that the user uses to sign in to the website
-  password is the password used to sign in to the website (We should definitely
-    rework this table or add an authentication table for password hashing)
+  hash is the hashed password used to sign in to the website
   phone_number and email are going to be used to send the images and information
     to the user
   Compound primary key of user_id and device_id because a user can own more than
@@ -53,8 +52,8 @@ CREATE TABLE users (
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(40) NOT NULL,
   -- TODO: make username unique
-  username VARCHAR(20) NOT NULL,
-  hash VARCHAR(32) NOT NULL,
+  username VARCHAR(20) NOT NULL UNIQUE,
+  hash VARCHAR(50) NOT NULL,
   phone_number VARCHAR(11) NOT NULL,
   email VARCHAR(50) NOT NULL,
   PRIMARY KEY (user_id, device_id)
@@ -174,6 +173,13 @@ CREATE INDEX user_id_images_idx ON images(user_id);
 CREATE INDEX user_id_sent_images_idx ON sent_images(user_id);
 CREATE INDEX user_id_user_settings_idx ON user_settings(user_id);
 
+
+INSERT INTO notification_options VALUE (DEFAULT, "text");
+INSERT INTO notification_options VALUE (DEFAULT, "email");
+INSERT INTO notification_options VALUE (DEFAULT, "both");
+
+
 /*
   Creates triggers for the database
 */
+

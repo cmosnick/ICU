@@ -75,6 +75,7 @@ def get_user(user_id = None, username = None, device_id=None):
 
 
 # Add a user
+# TODO: add sessions
 @user.route('/add/', methods = ['POST'])
 def add_user():
     try:
@@ -113,7 +114,7 @@ def add_user():
             return internal_error(e)
 
 # logs a user in
-# TODO: hash password
+# TODO: add sessions
 @user.route('/login/', methods = ["POST"])
 def login():
     try:
@@ -122,8 +123,6 @@ def login():
             username = request.form.get('username')
             password = request.form.get('password')            
 
-            hash = md5_crypt.encrypt(password)
-
             sqlaUser = query.login({
               "username" : username
             })
@@ -131,7 +130,7 @@ def login():
             if sqlaUser is not None:
                 #session['username'] = username
                 #print "here3"
-                if md5_crypt.verify(__dict__["hash"], hash) is True:
+                if md5_crypt.verify(password, sqlaUser.__dict__["hash"]) is True:
                     return success_message("User successfully logged in")
                 else:
                     return error_message("User info inncorrect")
@@ -144,6 +143,7 @@ def login():
         return internal_error(e)
 
 # logs a user out
+# TODO: add sessions
 @user.route('/logout/', methods=['GET'])
 def logout():
     try:

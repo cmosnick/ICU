@@ -11,13 +11,15 @@ apache2ctl start
 
 
 # Setup database
+printf "Y" | sudo apt-get install python-pip
+sudo pip install passlib
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password pass"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password pass"
 sudo apt-get -y -f install mysql-server
 # echo "\n\nCREATING DATABASE\n\n____________________________________\n"
 mysql -uroot -ppass -e "CREATE DATABASE capstone_icu;"
 mysql -uroot -ppass -e "use capstone_icu;"
-mysql -uroot -ppass -D "capstone_icu" < "/vagrant/database/exported_db.sql"
+mysql -uroot -ppass -D "capstone_icu" < "/"
 sudo pip install names
 # Make directory for files
 mkdir /database/
@@ -28,7 +30,6 @@ sudo cp /vagrant/database/test_images/* /database/images/
 
 
 # Install flask api
-printf "Y" | sudo apt-get install python-pip
 cd /vagrant/api
 sudo pip install Flask-API
 sudo pip install flask_sqlalchemy
