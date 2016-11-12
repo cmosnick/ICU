@@ -123,8 +123,6 @@ def login():
             username = request.form.get('username')
             password = request.form.get('password')            
 
-            hash = md5_crypt.encrypt(password)
-
             sqlaUser = query.login({
               "username" : username
             })
@@ -132,7 +130,7 @@ def login():
             if sqlaUser is not None:
                 #session['username'] = username
                 #print "here3"
-                if md5_crypt.verify(sqlaUser.__dict__["hash"], hash) is True:
+                if md5_crypt.verify(password, sqlaUser.__dict__["hash"]) is True:
                     return success_message("User successfully logged in")
                 else:
                     return error_message("User info inncorrect")
