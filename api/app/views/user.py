@@ -1,4 +1,4 @@
-from flask import jsonify, request, send_file, session, Blueprint
+from flask import jsonify, request, send_file, Blueprint
 from app.utility import *
 from app.database import db
 from app.models import *
@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 import uuid
 
 import app.views.settings as settings
-
+import app.views.session as session
 
 # Declare blueprint name api
 user = Blueprint('user',__name__,template_folder='templates')
@@ -135,10 +135,10 @@ def login():
         return internal_error(e)
 
 # logs a user out
-@user.route('/user/logout/', methods=['GET'])
+@user.route('/logout/', methods=['GET'])
 def logout():
     try:
-        if(check_session(username) == "success"):
+        if(session.check_session() == "success"):
             session.clear()
             return success_message("The user has successfully logged out")
         else:

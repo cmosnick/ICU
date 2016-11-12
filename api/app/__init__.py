@@ -13,6 +13,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
     db.init_app(app)
+    CORS(app)
     # Register blueprints below when created:
     app.register_blueprint(image, url_prefix='/image')
     app.register_blueprint(log, url_prefix='/log')
@@ -20,7 +21,6 @@ def create_app():
     app.register_blueprint(user, url_prefix='/user')
     app.register_blueprint(sessionBp, url_prefix='')
 
-    CORS(app)
     app.secret_key = os.urandom(24)
     return app
 
