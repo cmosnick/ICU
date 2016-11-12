@@ -26,7 +26,7 @@ settings = Blueprint('settings',__name__,template_folder='templates')
 def add_default_user_settings(user_id = 5):
     print "here"
     return add_user_settings({
-        "notification_option_id" : 1,
+        "notification_option_id" : 3,
         "user_id" : user_id,
         "start_time" : datetime.datetime.strptime("00:00", '%H:%M').time(),
         "end_time" : datetime.datetime.strptime("23:59", '%H:%M').time()
