@@ -1,3 +1,5 @@
+# This file is no longer in use in the app.  
+# It is here for reference in case some functions awere not copied into other files when broken up.
 # TODO: user authentication for any api endpoint use
 # TODO: # need to add functionality in other functions for logs to be sent to
 # the add_log function. actions are: 'image taken', 'text sent', 'email sent',
@@ -5,36 +7,21 @@
 #
 # TODO: add custom 404 message / page
 
-from flask import Flask, jsonify, request, send_file, session, make_response
-from flask_cors import CORS, cross_origin
-from utility import *
-from database import db
-from models import *
-import query
+from flask import jsonify, request, send_file, session, Blueprint, make_response
+from app.utility import *
+from app.database import db
+from app.models import *
+import app.query as query
 import config
+from app.routing_utils import *
 import os
 from werkzeug.utils import secure_filename
 import uuid
-from sqlalchemy import DateTime
-import datetime
 
 
-app = Flask(__name__)
-app.config.from_object(config)
-db.init_app(app)
-CORS(app)
-app.secret_key = os.urandom(24)
+# Declare blueprint name api
+api = Blueprint('api',__name__,template_folder='templates')
 
-
-# Create error messages
-def internal_error(e):
-    return jsonify({"Error": str(e)}), 500
-
-def error_message(message):
-    return jsonify({"Error": message}), 400
-
-def success_message(message):
-    return jsonify({"Success": message}), 200
 
 ################
 ################
@@ -42,7 +29,7 @@ def success_message(message):
 ################
 ################
 
-@app.route('/')
+@api.route('/')
 def api_root():
     return 'Welcome'
 
@@ -52,10 +39,10 @@ def api_root():
 #########
 
 # Get user info by id or username
-@app.route('/user/id/<int:user_id>',  methods = ['GET'])
-@app.route('/user/device/<int:device_id>',  methods = ['GET'])
-@app.route('/user/<username>', methods = ['GET'])
-@app.route('/user/', methods = ["GET"])
+@api.route('/user/id/<int:user_id>',  methods = ['GET'])
+@api.route('/user/device/<int:device_id>',  methods = ['GET'])
+@api.route('/user/<username>', methods = ['GET'])
+@api.route('/user/', methods = ["GET"])
 def get_user(user_id = None, username = None, device_id=None):
     try:
         if ((user_id is not None) or (username is not None) or (device_id is not None)):
@@ -73,8 +60,8 @@ def get_user(user_id = None, username = None, device_id=None):
 
 # Get all users
 # TODO: add extra info like 'count'
-@app.route('/users/',  methods = ['GET'])
-@app.route('/users/all/',  methods = ['GET'])
+@api.route('/users/',  methods = ['GET'])
+@api.route('/users/all/',  methods = ['GET'])
 def get_all_users():
     try:
         # return list of all users
@@ -93,7 +80,7 @@ def get_all_users():
 
 # logs a user in
 # TODO: hash password
-@app.route('/user/login/', methods = ["POST"])
+@api.route('/user/login/', methods = ["POST"])
 def login():
     try:
         if request.method == 'POST':
@@ -102,14 +89,11 @@ def login():
             password = request.form.get('password')            
 
             sqlaUser = query.login({
-            	"username" : username, 
-            	"password" : password
+              "username" : username, 
+              "password" : password
             })
             if sqlaUser is not None:
                 session['username'] = username
-                session['login'] = True
-            	#resp = make_response(render_template('Dashboard.html'))
-   				#resp.set_cookie('login', True)
                 return success_message("The user has successfully logged in")
             else:
                 return error_message("Could not retrieve user")
@@ -120,21 +104,19 @@ def login():
         return internal_error(e)
 
 # logs a user out
-@app.route('/user/logout/username/<username>', methods = ['GET'])
+@api.route('/user/logout', methods=['GET'])
 def logout():
     try:
-    	if(check_session(username) == "success"):
-	        session.clear()
-	        #resp = make_response(render_template(index.html))
-			#resp.set_cookie('login', expires=0)
-	        return success_message("The user has successfully logged out")
-	    #else:
-	    	#return error_message("The user is not logged in. Logout unsuccessful.")
+		if 'username' in session:
+			session.pop("username", None)
+			return success_message("The user has successfully logged out")
+		else:
+			return error_message("The user is not logged in. Logout unsuccessful.")
     except Exception as e:
         return internal_error(e)
 
 # Add a user
-@app.route('/user/add/', methods = ['POST'])
+@api.route('/user/add/', methods = ['POST'])
 def add_user():
     try:
         if request.method == 'POST':
@@ -158,10 +140,7 @@ def add_user():
                 "email" : email
             })
             if user_id >= 0:
-            	session['username'] = username
-            	session['login'] = True
-            	#resp = make_response(render_template('Dashboard.html'))
-   				#resp.set_cookie('login', True)
+                session['username'] = username
                 # Add default notification settings for user
                 print "here"
                 add_default_user_settings(user_id)
@@ -174,7 +153,7 @@ def add_user():
     except Exception as e:
             return internal_error(e)
 
-@app.route('/user/add/settings_test/', methods = ['GET'])
+@api.route('/user/add/settings_test/', methods = ['GET'])
 def add_default_user_settings(user_id = 5):
     print "here"
     return add_user_settings({
@@ -185,7 +164,7 @@ def add_default_user_settings(user_id = 5):
         })
 
 # Add user settings
-@app.route('/user_settings/add/', methods = ['POST'])
+@api.route('/user_settings/add/', methods = ['POST'])
 def add_user_settings(params = None):
     try:
         if params is not None:
@@ -207,7 +186,7 @@ def add_user_settings(params = None):
 
 # Update user settings
 # TODO: filter update to not require all fields
-@app.route('/user_settings/update/', methods = ['POST'])
+@api.route('/user_settings/update/', methods = ['POST'])
 def update_user_settings():
     if request.method == 'POST':
         try:
@@ -244,7 +223,7 @@ def update_user_settings():
 
 #TODO: should not_opts table and user settings table be combined?  m-m relationship?
 # Get options by not_opt id, user id, or username
-@app.route('/notification_options/<int:not_id>', methods = ['GET'])
+@api.route('/notification_options/<int:not_id>', methods = ['GET'])
 def get_notification_options(not_id=None):
     try:
         if (not_id is not None):
@@ -265,8 +244,8 @@ def get_notification_options(not_id=None):
 
 
 # get all notification options for all users
-@app.route('/notification_options/', methods = ['GET'])
-@app.route('/notification_options/all/', methods = ['GET'])
+@api.route('/notification_options/', methods = ['GET'])
+@api.route('/notification_options/all/', methods = ['GET'])
 def get_all_notification_options():
     try:
         # return list of all notification options
@@ -290,9 +269,9 @@ def get_all_notification_options():
 # USER SETTINGS #
 #################
 # TODO: do a join with user info?
-@app.route('/user_settings/setting/<int:setting_id>', methods = ['GET'])
-@app.route('/user_settings/<username>', methods = ['GET'])
-@app.route('/user_settings/id/<int:user_id>', methods = ['GET'])
+@api.route('/user_settings/setting/<int:setting_id>', methods = ['GET'])
+@api.route('/user_settings/<username>', methods = ['GET'])
+@api.route('/user_settings/id/<int:user_id>', methods = ['GET'])
 def get_user_settings(username = None, user_id = None, setting_id = None):
     try:
         if username is not None:
@@ -333,20 +312,9 @@ def get_user_settings(username = None, user_id = None, setting_id = None):
 ##########
 
 # Get image by id
-@app.route('/image/id/', methods = ['GET'])
-@app.route('/image/id/<int:image_id>', methods = ['GET'])
+@api.route('/image/id/', methods = ['GET'])
+@api.route('/image/id/<int:image_id>', methods = ['GET'])
 def get_image(image_id = None):
-    # try:
-    #     if image_id is not None:
-    #         info = get_image_info(image_id)
-    #         filename = info.image
-    #         # Todo: complete the actual sending of the image
-    #         return send_file(filename, )
-
-    #     else:
-    #         return error_message("Please specify image_id")
-    # except Exception as e:
-    #     return internal_error(e)
     try:
         if image_id is not None:
             # Get filename
@@ -370,8 +338,8 @@ def get_image(image_id = None):
 # Get image by filepath?  *Idk if that is safe*
 
 # Get image info by image id
-@app.route('/image/info/id/', methods = ['GET'])
-@app.route('/image/info/id/<int:image_id>', methods = ['GET'])
+@api.route('/image/info/id/', methods = ['GET'])
+@api.route('/image/info/id/<int:image_id>', methods = ['GET'])
 def get_image_info(image_id = None):
     try:
         if image_id is not None:
@@ -388,8 +356,8 @@ def get_image_info(image_id = None):
 
 
 # Get all image ids for a user
-@app.route('/image/info/user/id/<int:user_id>', methods = ['GET'])
-@app.route('/image/info/user/<username>', methods = ['GET'])
+@api.route('/image/info/user/id/<int:user_id>', methods = ['GET'])
+@api.route('/image/info/user/<username>', methods = ['GET'])
 def get_images_by_user(user_id = None, username = None):
     try:
         if ((username is not None) or (user_id is not None)):
@@ -416,8 +384,8 @@ def get_images_by_user(user_id = None, username = None):
 ################
 
 # Add image to database
-@app.route('/image/add/', methods=['POST'])
-@app.route('/image/add/<int:device_id>', methods=['POST'])
+@api.route('/image/add/', methods=['POST'])
+@api.route('/image/add/<int:device_id>', methods=['POST'])
 def upload_file(device_id = None):
     try:
         if request.method == 'POST':
@@ -458,32 +426,6 @@ def upload_file(device_id = None):
     except Exception as e:
         return internal_error(e)
 
-
-# # Route to retrieve image(s) by id. Can receive filename or json array of filenames
-# @app.route('/image/file/id/<int:image_id>', methods=['GET', 'POST'])
-# # @app.route('/image/files/<int:image_id>', methods=['GET', 'POST'])
-# def download_image(image_id=None):
-#     try:
-#         if image_id is not None:
-#             # Get filename
-#             image_info = query.get_image_info(image_id)
-#             if image_info is not None:
-#                 filename = app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
-#                 print filename
-#                 if ((filename is not None) and (os.path.isfile(filename)) ):
-#                     # send file
-#                     return send_file(filename, mimetype='image/jpeg')
-#                 else:
-#                     return error_message("Image not found")
-#             else:
-#                 return error_message("No image found for image_id")       
-#         else:
-#             return error_message("Please include image_id or post array of image_ids")
-#     except Exception as e:
-#         return internal_error(e)
-
-
-
 ##################################
 # TODO: CREATE LOGGING FUNCTIONS #
 ##################################
@@ -492,7 +434,7 @@ def upload_file(device_id = None):
 # TODO: need to add functionality in other functions for logs to be sent to this function
 # actions are: 'image taken', 'text sent', 'email sent',
 # 'sign in', 'sign out', 'alter accout', 'initial activation'
-@app.route('/log/id/<int:user_id>/action/<action>',  methods = ['GET'])
+@api.route('/log/id/<int:user_id>/action/<action>',  methods = ['GET'])
 def add_log(user_id = None, action = None):
     try:
         return query.add_log({
@@ -505,8 +447,8 @@ def add_log(user_id = None, action = None):
 
 
 # Get all logs related to a user
-@app.route('/log/info/user/id/<int:user_id>', methods = ['GET'])
-@app.route('/log/info/user/<username>', methods = ['GET'])
+@api.route('/log/info/user/id/<int:user_id>', methods = ['GET'])
+@api.route('/log/info/user/<username>', methods = ['GET'])
 def get_logs_by_user(user_id = None, username = None):
     try:
         if ((username is not None) or (user_id is not None)):
@@ -533,11 +475,10 @@ def get_logs_by_user(user_id = None, username = None):
 @app.route('/session/', methods = ['GET'])
 def check_session():
     try:
-        #if (request.cookies.get('login') == True):
-        if session.get("login", True):
+        if 'username' in session:
     		return success_message("The session exists")
         else:
-            return error_message("The session does not exist")
+            return "The session does not exist"
     except Exception as e:
         return internal_error(e)
 

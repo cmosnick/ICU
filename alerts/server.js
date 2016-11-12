@@ -10,6 +10,8 @@ var config = require('./config');
 var client = require('twilio')(config.accountSid, config.authToken);
 
 app.get('/sendSMS', function(req, res){
+	var numAppend = '+1';
+	var formattedNum;
 	//User's number
 	var toNum = req.query.toNum; // $_GET["toNum"]
 	//Twilio number
@@ -18,9 +20,16 @@ app.get('/sendSMS', function(req, res){
 	var text = req.query.text; // $_GET["text"]
 	//Image server URL
 	var image = req.query.image;
+	
+	if(toNum[0] != '+' && toNum[1] != '1'){
+		formattedNum = numAppend.concat(toNum)
+	}
+	else{
+		formattedNum = toNum;
+	}
 		//Create message
 		client.sendMessage({
-			to: toNum,
+			to: formattedNum,
 			from: fromNumber,
 			body: text,
 			mediaUrl: image,
@@ -53,12 +62,13 @@ app.get('/emailUser', function(req, res){
 	}));
 	
 	//Prepare email body
+	var imgUrl = "'http://s1.thingpic.com/images/HU/CDZn4zEZTgyRP5eiPQoJeye3.jpeg'";
 	var mailOptions = {
 		from: 'ICU Alerts <ICUAlerts@yahoo.com>',
 		to: toEmail,
 		subject: 'Movement Detected',
 		text: 'This is an updated test!',
-		html: '<p>This is an updated test!</p>'
+		html: '<p>This is an updated test! <br> <img src=' + imgUrl + '/></p>'
 	};
 	
 	//Send email

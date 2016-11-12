@@ -1,9 +1,8 @@
 # TODO: determine standard return format for insert and update
-import json
-from database import db, engine
-from models import *
-from sqlalchemy.orm import create_session, sessionmaker
-from sqlalchemy import asc, desc, DateTime
+from flask import jsonify
+from app.database import engine
+from app.models import *
+from sqlalchemy.orm import sessionmaker
 
 
 Session = sessionmaker(bind=engine)
@@ -16,19 +15,19 @@ def add(obj):
     usersarray = []
     for row in session.query(SQLAUser).all():
         usersarray.append(SQLAUser)
-    return json.dumps(SQLAUser)
+    return jsonify(SQLAUser)
 
 
 def get_user(user_id=None, username=None, device_id=None):
     session = Session()
     if user_id is not None:
-        # print user_id
+        print user_id
         return session.query(SQLAUser).filter_by(user_id=user_id).first()
     elif username is not None:
-        # print username
+        print username
         return session.query(SQLAUser).filter_by(username=username).first()
     elif device_id is not None:
-        # print device_id
+        print device_id
         return session.query(SQLAUser).filter_by(device_id=device_id).first()
     else:
         raise Exception("Could not retrieve user")
@@ -52,7 +51,7 @@ def update_user_settings(user_id, update_fields):
         print field_w_value
         session.query(SQLAUserSetting).filter_by(user_id = user_id).update(field_w_value)
     session.commit()
-    return "Updated: " + str(user_id)
+    return str(user_id)
 
 
 def add_user_settings(user_settings_info):
@@ -65,7 +64,7 @@ def add_user_settings(user_settings_info):
     )
     session.add(user_settings)
     session.commit()
-    return "Added: " + json.dumps(user_settings_info)
+    return jsonify(user_settings_info)
 
 
 def add_user(user_info):
@@ -82,6 +81,7 @@ def add_user(user_info):
     session.add(user)
     session.flush()
     session.refresh(user)
+    session.commit()
     return user.user_id
 
 
@@ -93,7 +93,7 @@ def add_log(log_info):
     )
     session.add(log)
     session.commit()
-    return "Added: " + json.dumps(log_info)
+    return jsonify(log_info)
 
 
 def get_logs_by_user(user_id=None, username=None):
@@ -143,7 +143,7 @@ def add_image_info(imageInfo):
     )
     session.add(info)
     session.commit()
-    return "Added: " + json.dumps(imageInfo)
+    return jsonify(imageInfo)
 
 
 def get_image_info(image_id):

@@ -52,6 +52,7 @@ CREATE TABLE users (
 	device_id INTEGER,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(40) NOT NULL,
+  -- TODO: make username unique
   username VARCHAR(20) NOT NULL,
   password VARCHAR(20) NOT NULL,
   phone_number VARCHAR(11) NOT NULL,

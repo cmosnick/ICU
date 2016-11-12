@@ -1,6 +1,7 @@
-//if a current session already exists for the username, redirect to the dashboard
+//When accessing the login and signup pages, 
+// if a current session already exists for the username, redirect to the dashboard
 // TODO: FIX THIS SO IT DOESN'T ACT DUMB
-function checkSession(){
+function hasSession(){
 	
 	$.get("http://icu.services:5000/session/",
 	{},
@@ -12,9 +13,37 @@ function checkSession(){
 	});
 }
 
+//When accessing the MyImages, Register, and Settings pages
+// if no session exists for the username, redirect to index
+// TODO: FIX THIS SO IT DOESN'T ACT DUMB
+function hasNoSession(){
+	
+	$.get("http://icu.services:5000/session/",
+	{},
+	function(data, status){		
+		if(status === 'error')
+		{
+			window.location.href = "http://icu.services/index.html"
+		}
+	}).fail(
+	function(data, status){		
+		if(status === 'error')
+		{
+			window.location.href = "http://icu.services/index.html"
+		}
+	});
+}
+
 /* TODO: add log functionality, call the api logout function */
 function logout(){
-	window.location.href = "http://icu.services/index.html";
+	$.get("http://icu.services:5000/user/logout/",
+	{},
+	function(data, status){		
+		if(status === 'success')
+		{
+			window.location.href = "http://icu.services/index.html";
+		}
+	});
 }
 
 function signUp()
