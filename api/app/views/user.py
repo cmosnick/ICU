@@ -11,6 +11,8 @@ import uuid
 import app.views.settings as settings
 import app.views.session as sessionView
 
+# from app import appSession
+
 # Declare blueprint name api
 user = Blueprint('user',__name__,template_folder='templates')
 
