@@ -75,6 +75,7 @@ def get_user(user_id = None, username = None, device_id=None):
 
 
 # Add a user
+# TODO: add sessions
 @user.route('/add/', methods = ['POST'])
 def add_user():
     try:
@@ -113,7 +114,7 @@ def add_user():
             return internal_error(e)
 
 # logs a user in
-# TODO: hash password
+# TODO: add sessions
 @user.route('/login/', methods = ["POST"])
 def login():
     try:
@@ -144,6 +145,7 @@ def login():
         return internal_error(e)
 
 # logs a user out
+# TODO: add sessions
 @user.route('/logout/', methods=['GET'])
 def logout():
     try:
