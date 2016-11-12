@@ -25,6 +25,12 @@ function hasNoSession(){
 		{
 			window.location.href = "http://icu.services/index.html"
 		}
+	}).fail(
+	function(data, status){		
+		if(status === 'error')
+		{
+			window.location.href = "http://icu.services/index.html"
+		}
 	});
 }
 
