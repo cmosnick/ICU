@@ -23,7 +23,7 @@ def check_session():
         if 'username' in session:
             return success_message("The session exists")
         else:
-            return failure_message("The session does not exist")
+            return "The session does not exist"
     except Exception as e:
         return internal_error(e)
 

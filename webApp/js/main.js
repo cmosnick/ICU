@@ -21,7 +21,7 @@ function hasNoSession(){
 	$.get("http://icu.services:5000/session/",
 	{},
 	function(data, status){		
-		if(status === 'failure')
+		if(status !== 'success')
 		{
 			window.location.href = "http://icu.services/index.html"
 		}

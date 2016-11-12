@@ -9,6 +9,3 @@ def error_message(message):
 
 def success_message(message):
     return jsonify({"Success": message}), 200
-
-def failure_message(message):
-    return jsonify({"Failure": message}), 200
