@@ -5,6 +5,7 @@
 * [Notifications](#notification-settings-routes)
 * [User Settings](#user-settings-routes)
 * [Images](#image-routes)
+* [Authentication](#authentication)
 
 
 
@@ -201,5 +202,20 @@
 will send raw image
 ```
 
+##Authentication
 
+* __/user/login/__
+ * POST login info with:
+  * username
+  * password
+  
+```
+```
+
+* __/user/logout/__
+ * Send GET request for logout
+ 
+ 
+* __/session/__
+ * GET info about session. If exists or not
  
