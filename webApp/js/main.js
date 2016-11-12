@@ -10,9 +10,6 @@ function hasSession(){
 		{
 			window.location.href = "http://icu.services/Dashboard.html"
 		}
-		else(
-			return;
-		)
 	});
 }
 
