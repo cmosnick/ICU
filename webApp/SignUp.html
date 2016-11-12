@@ -79,15 +79,8 @@
 <script>
 	$(".SubmitBtn").click(signUp);
 
-    /*$(document).ready(function(){
-        $.get("http://icu.services:5000/session/",
-        {},
-        function(data, status){     
-            if(status === 'success')
-            {
-                window.location.href = "http://icu.services/Dashboard.html"
-            }
-        });
-    });*/
+    $(document).ready(function(){
+        checkSession();
+    });
 </script>
 </html>

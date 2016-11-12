@@ -107,9 +107,6 @@ def login():
             })
             if sqlaUser is not None:
                 session['username'] = username
-                session['login'] = True
-            	#resp = make_response(render_template('Dashboard.html'))
-   				#resp.set_cookie('login', True)
                 return success_message("The user has successfully logged in")
             else:
                 return error_message("Could not retrieve user")
@@ -125,8 +122,6 @@ def logout():
     try:
     	if(check_session(username) == "success"):
 	        session.clear()
-	        #resp = make_response(render_template(index.html))
-			#resp.set_cookie('login', expires=0)
 	        return success_message("The user has successfully logged out")
 	    #else:
 	    	#return error_message("The user is not logged in. Logout unsuccessful.")
@@ -159,9 +154,6 @@ def add_user():
             })
             if user_id >= 0:
             	session['username'] = username
-            	session['login'] = True
-            	#resp = make_response(render_template('Dashboard.html'))
-   				#resp.set_cookie('login', True)
                 # Add default notification settings for user
                 print "here"
                 add_default_user_settings(user_id)
@@ -534,7 +526,7 @@ def get_logs_by_user(user_id = None, username = None):
 def check_session():
     try:
         #if (request.cookies.get('login') == True):
-        if session.get("login", True):
+        if 'username' in session:
     		return success_message("The session exists")
         else:
             return error_message("The session does not exist")
