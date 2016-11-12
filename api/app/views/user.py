@@ -123,6 +123,9 @@ def login():
               "username" : username, 
               "password" : password
             })
+            print sqlaUser["username"]
+            print sqlaUser["password"]
+
             if sqlaUser is not None:
                 session['username'] = username
                 return "success"
