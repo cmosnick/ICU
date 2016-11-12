@@ -22,17 +22,16 @@
         <div class="WhiteBar">
             <a href="index.html"><div class="Logo"></div></a>
             <div class="NavUL">
-                <div class="NavTab">Plans / Pricing</div>
-                <div class="NavTab">Equipment</div>
-                <div class="NavTab">Support</div>
+                <a href="MyImages.html"><div class="NavTab TabSelect">View Images</div></a>
+                <a href="Register.html"><div class="NavTab">Register Device</div></a>
+                <a href="Settings.html"><div class="NavTab">My Settings</div></a>
             </div>
         </div>
     </header>
     
    <div class="MainContent">
         <section class="FirstSection">
-            <h1 class="IntroHeading">My Images</h1>
-            <div class="images" id="imageContainer">
+            <div class="centerDiv" id="imageDiv">
 
             </div>
         </section>
@@ -46,7 +45,7 @@
 <script>
 	$(function() 
 	{
-		var htmlId = "imageContainer";
+		var htmlId = "imageDiv";
 		var userId = 2;
 		getImages(userId, htmlId);
 	});
