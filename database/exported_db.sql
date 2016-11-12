@@ -163,7 +163,7 @@ CREATE TABLE `users` (
   `device_id` int(11) NOT NULL DEFAULT '0',
   `first_name` varchar(30) NOT NULL,
   `last_name` varchar(40) NOT NULL,
-  `username` varchar(20) NOT NULL,
+  `username` varchar(20) NOT NULL UNIQUE,
   `hash` varchar(32) NOT NULL,
   `phone_number` varchar(11) NOT NULL,
   `email` varchar(50) NOT NULL,

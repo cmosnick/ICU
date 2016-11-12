@@ -30,7 +30,6 @@ class CustomBase():
     def __init__(self, sqlAlchemyObject):
         self.sqlObj = sqlAlchemyObject
         
-
     def to_json(self):
         return jsonify(self.to_dict())
 
