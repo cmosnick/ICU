@@ -53,7 +53,7 @@ CREATE TABLE users (
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(40) NOT NULL,
   -- TODO: make username unique
-  username VARCHAR(20) NOT NULL,
+  username VARCHAR(20) NOT NULL UNIQUE,
   hash VARCHAR(32) NOT NULL,
   phone_number VARCHAR(11) NOT NULL,
   email VARCHAR(50) NOT NULL,
