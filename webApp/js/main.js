@@ -30,7 +30,14 @@ function hasNoSession(){
 
 /* TODO: add log functionality, call the api logout function */
 function logout(){
-	window.location.href = "http://icu.services/index.html";
+	$.get("http://icu.services:5000/user/logout/",
+	{},
+	function(data, status){		
+		if(status === 'success')
+		{
+			window.location.href = "http://icu.services/index.html";
+		}
+	});
 }
 
 function signUp()

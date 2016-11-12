@@ -107,11 +107,11 @@ def login():
 @api.route('/user/logout', methods=['GET'])
 def logout():
     try:
-    	if(check_session(username) == "success"):
-	        session.clear()
-	        return success_message("The user has successfully logged out")
-	    #else:
-	    	#return error_message("The user is not logged in. Logout unsuccessful.")
+		if 'username' in session:
+			session.pop("username", None)
+			return success_message("The user has successfully logged out")
+		else:
+			return error_message("The user is not logged in. Logout unsuccessful.")
     except Exception as e:
         return internal_error(e)
 
@@ -475,7 +475,6 @@ def get_logs_by_user(user_id = None, username = None):
 @app.route('/session/', methods = ['GET'])
 def check_session():
     try:
-        #if (request.cookies.get('login') == True):
         if 'username' in session:
     		return success_message("The session exists")
         else:
