@@ -92,7 +92,7 @@ def create_user_settings_for_user(user_id=1):
     #End time
     endTime   = str(random.randint(0,23)) + ":" + random.choice(["00", "30"])  
 
-    sql = "\"INSERT INTO user_settings value( DEFAULT, '"+str(5)+"', "+ str(enumName) +", '"+startTime+"', '"+endTime+"');\""
+    sql = "\"INSERT INTO user_settings value( DEFAULT, '"+str(user_id)+"', "+ str(enumName) +", '"+startTime+"', '"+endTime+"');\""
     send_mysql(sql)
 
 
