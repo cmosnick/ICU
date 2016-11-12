@@ -11,7 +11,7 @@
   <style type="text/css">
   </style>
 </head>
-<body>
+<body onload="hasNoSession();">
     <header class="Header">
         <div class="GrayBar">
             <div class="GrayBarContents">
@@ -50,9 +50,5 @@
 		var userId = 2;
 		getImages(userId, htmlId);
 	});
-  
-  $(document).ready(function(){
-      hasSession();
-  });
 </script>
 </html>
