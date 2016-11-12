@@ -12,6 +12,8 @@ from passlib.hash import md5_crypt
 import app.views.settings as settings
 import app.views.session as sessionView
 
+# from app import appSession
+
 # Declare blueprint name api
 user = Blueprint('user',__name__,template_folder='templates')
 
@@ -97,11 +99,11 @@ def add_user():
                 "email" : email
             })
             if user_id >= 0:
+
                 #session['username'] = username
                 # Add default notification settings for user
                 #print "here"
                 settings.add_default_user_settings(user_id)
-                print "here2"
                 return success_message("Added user " + str(user_id))
             else:
                 return error_message("Could not add user")

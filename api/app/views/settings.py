@@ -152,8 +152,11 @@ def get_user_settings(username = None, user_id = None, setting_id = None):
             sql_user_settings = query.get_user_settings(None, user_id)
             print sql_user_settings
             if sql_user_settings is not None:
-                user_settings = UserSetting(sql_user_settings)
-                return user_settings.to_json()
+                settings = []
+                for sql_user_setting in sql_user_settings:
+                    user_setting = UserSetting(sql_user_setting)
+                    settings.append(user_setting.to_dict())
+                return jsonify(settings)
             else:
                 return error_message("No user found for user_id " +str(user_id))
         if setting_id is not None:

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 import config
 from app.database import db
 from flask_cors import CORS, cross_origin
@@ -8,6 +8,8 @@ from app.views.log import log
 from app.views.settings import settings
 from app.views.user import user
 from app.views.session import sessionBp
+
+# appSession = session
 
 def create_app():
     app = Flask(__name__)
