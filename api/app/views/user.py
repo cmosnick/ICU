@@ -135,7 +135,7 @@ def login():
         return internal_error(e)
 
 # logs a user out
-@user.route('/user/logout', methods=['GET'])
+@user.route('/user/logout/', methods=['GET'])
 def logout():
     try:
         if(check_session(username) == "success"):
