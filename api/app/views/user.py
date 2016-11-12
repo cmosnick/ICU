@@ -123,12 +123,10 @@ def login():
               "username" : username, 
               "password" : password
             })
-            print sqlaUser["username"]
-            print sqlaUser["password"]
 
             if sqlaUser is not None:
                 session['username'] = username
-                return "success"
+                return success_message("User successfully logged in")
             else:
                 return error_message("Could not retrieve user")
         else:
@@ -142,7 +140,7 @@ def login():
 def logout():
     try:
         if(session.check_session() == "success"):
-            session.clear()
+            session.pop("Username", None)
             return success_message("The user has successfully logged out")
         else:
             return error_message("The user is not logged in. Logout unsuccessful.")
