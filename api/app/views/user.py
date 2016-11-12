@@ -1,4 +1,4 @@
-from flask import jsonify, request, send_file, Blueprint
+from flask import jsonify, request, send_file, Blueprint, session
 from app.utility import *
 from app.database import db
 from app.models import *
@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 import uuid
 
 import app.views.settings as settings
-import app.views.session as session
+import app.views.session as sessionView
 
 # Declare blueprint name api
 user = Blueprint('user',__name__,template_folder='templates')
@@ -125,8 +125,9 @@ def login():
             })
 
             if sqlaUser is not None:
-                session['username'] = username
-                return success_message("User successfully logged in")
+	        session['username'] = username
+            	print "here3"
+		return success_message("User successfully logged in")
             else:
                 return error_message("Could not retrieve user")
         else:
@@ -139,7 +140,7 @@ def login():
 @user.route('/logout/', methods=['GET'])
 def logout():
     try:
-        if(session.check_session() == "success"):
+        if(sessionView.check_session() == "success"):
             session.pop("Username", None)
             return success_message("The user has successfully logged out")
         else:
