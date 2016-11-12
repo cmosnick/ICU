@@ -70,39 +70,6 @@ def get_user(user_id = None, username = None, device_id=None):
     except Exception as e:
         return internal_error(e)
 
-# logs a user in
-# TODO: hash password
-@user.route('/login/', methods = ["POST"])
-def login():
-    try:
-        if request.method == 'POST':
-        # TODO: check all fields are in request before accessing request args
-            username = request.form.get('username')
-            password = request.form.get('password')            
-
-            sqlaUser = query.login({
-              "username" : username, 
-              "password" : password
-            })
-            if sqlaUser is not None:
-                session['username'] = username
-                return "success"
-            else:
-                return error_message("Could not retrieve user")
-        else:
-            return error_message("POST required for user insertion")
-
-    except Exception as e:
-        return internal_error(e)
-
-# logs a user out
-@user.route('/logout/')
-def logout():
-    try:
-        session.pop('username', None)
-
-    except Exception as e:
-        return internal_error(e)
 
 # Add a user
 @user.route('/add/', methods = ['POST'])
@@ -141,3 +108,40 @@ def add_user():
             return error_message("POST required for user insertion")
     except Exception as e:
             return internal_error(e)
+
+# logs a user in
+# TODO: hash password
+@user.route('/login/', methods = ["POST"])
+def login():
+    try:
+        if request.method == 'POST':
+        # TODO: check all fields are in request before accessing request args
+            username = request.form.get('username')
+            password = request.form.get('password')            
+
+            sqlaUser = query.login({
+              "username" : username, 
+              "password" : password
+            })
+            if sqlaUser is not None:
+                session['username'] = username
+                return "success"
+            else:
+                return error_message("Could not retrieve user")
+        else:
+            return error_message("POST required for user insertion")
+
+    except Exception as e:
+        return internal_error(e)
+
+# logs a user out
+@user.route('/user/logout', methods=['GET'])
+def logout():
+    try:
+        if(check_session(username) == "success"):
+            session.clear()
+            return success_message("The user has successfully logged out")
+        #else:
+            #return error_message("The user is not logged in. Logout unsuccessful.")
+    except Exception as e:
+        return internal_error(e)

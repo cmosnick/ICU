@@ -7,6 +7,7 @@ from app.routing_utils import *
 import os
 from werkzeug.utils import secure_filename
 import uuid
+from config import IMAGE_DIRECTORY
 
 
 # Declare blueprint named image
@@ -33,7 +34,7 @@ def get_image(image_id = None):
             # Get filename
             image_info = query.get_image_info(image_id)
             if image_info is not None:
-                filename =  app.config['IMAGE_DIRECTORY'] + image_info.__dict__['image']
+                filename = IMAGE_DIRECTORY + image_info.__dict__['image']
                 print filename
                 if ((filename is not None) and (os.path.isfile(filename)) ):
                     # send file
@@ -114,7 +115,7 @@ def upload_file(device_id = None):
                 print filename
                 if file and allowed_file(filename):
                     filename = secure_filename(filename)
-                    file.save(os.path.join(app.config['IMAGE_DIRECTORY'], filename))
+                    file.save(os.path.join(IMAGE_DIRECTORY, filename))
                     # Get user id from sender device
                     sqlaUser = query.get_user(device_id=device_id)
                     user = User(sqlaUser)
@@ -131,6 +132,11 @@ def upload_file(device_id = None):
                         "image" : filename
                     })
                     # TODO: send image to user (James)
+                    # Determine user settings
+
+                    # Text: number, filepath
+
+                    # Email: email, filepath, name, 
 
                 else:
                     return error_message("Bad filename. Our bad.")

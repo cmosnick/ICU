@@ -7,6 +7,7 @@ from app.views.image import image
 from app.views.log import log
 from app.views.settings import settings
 from app.views.user import user
+from app.views.session import sessionBp
 
 def create_app():
     app = Flask(__name__)
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(log, url_prefix='/log')
     app.register_blueprint(settings, url_prefix='') # do not chnage prefix here, keep routes as-is
     app.register_blueprint(user, url_prefix='/user')
+    app.register_blueprint(sessionBp, url_prefix='')
 
     CORS(app)
     app.secret_key = os.urandom(24)

@@ -1,10 +1,18 @@
 # This file is no longer in use in the app.  
 # It is here for reference in case some functions awere not copied into other files when broken up.
-from flask import jsonify, request, send_file, session, Blueprint
+# TODO: user authentication for any api endpoint use
+# TODO: # need to add functionality in other functions for logs to be sent to
+# the add_log function. actions are: 'image taken', 'text sent', 'email sent',
+# 'sign in', 'sign out', 'alter accout', 'initial activation'
+#
+# TODO: add custom 404 message / page
+
+from flask import jsonify, request, send_file, session, Blueprint, make_response
 from app.utility import *
 from app.database import db
 from app.models import *
 import app.query as query
+import config
 from app.routing_utils import *
 import os
 from werkzeug.utils import secure_filename
@@ -86,7 +94,7 @@ def login():
             })
             if sqlaUser is not None:
                 session['username'] = username
-                return "success"
+                return success_message("The user has successfully logged in")
             else:
                 return error_message("Could not retrieve user")
         else:
@@ -96,11 +104,14 @@ def login():
         return internal_error(e)
 
 # logs a user out
-@api.route('/user/logout')
+@api.route('/user/logout', methods=['GET'])
 def logout():
     try:
-        session.pop('username', None)
-
+    	if(check_session(username) == "success"):
+	        session.clear()
+	        return success_message("The user has successfully logged out")
+	    #else:
+	    	#return error_message("The user is not logged in. Logout unsuccessful.")
     except Exception as e:
         return internal_error(e)
 
@@ -196,10 +207,10 @@ def update_user_settings():
                 return query.update_user_settings(user_id, update_fields)               
 
             else:
-                return error_message("Must specify user_id to update")
+            	return error_message("Must specify user_id to update")
 
-        except Exception as e:
-            return internal_error(e)
+    	except Exception as e:
+        	return internal_error(e)
     else:
         return error_message("POST required for user insertion")
 
@@ -454,3 +465,25 @@ def get_logs_by_user(user_id = None, username = None):
             return error_message("Please specify user name or id to retrieve log infos")
     except Exception as e:
         return internal_error(e)
+
+
+##################################
+		# SESSION CHECKING #
+##################################
+
+# Checks if a session exists
+@app.route('/session/', methods = ['GET'])
+def check_session():
+    try:
+        #if (request.cookies.get('login') == True):
+        if 'username' in session:
+    		return success_message("The session exists")
+        else:
+            return "The session does not exist"
+    except Exception as e:
+        return internal_error(e)
+
+
+# Start app finally
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)

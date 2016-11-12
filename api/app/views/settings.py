@@ -20,7 +20,7 @@ settings = Blueprint('settings',__name__,template_folder='templates')
 ################
 
 
-@settings.route('/user/add/settings_test/', methods = ['GET'])
+@settings.route('/add/settings_test/', methods = ['GET'])
 def add_default_user_settings(user_id = 5):
     print "here"
     return add_user_settings({
@@ -28,7 +28,7 @@ def add_default_user_settings(user_id = 5):
         "user_id" : 5,
         "start_time" : "00:00",
         "end_time" : "23:59"
-        })
+    })
 
 # Add user settings
 @settings.route('/user_settings/add/', methods = ['POST'])
@@ -136,6 +136,7 @@ def get_all_notification_options():
 # USER SETTINGS #
 #################
 # TODO: do a join with user info?
+# TODO: make sure user settings are insterted on user add
 @settings.route('/user_settings/setting/<int:setting_id>', methods = ['GET'])
 @settings.route('/user_settings/<username>', methods = ['GET'])
 @settings.route('/user_settings/id/<int:user_id>', methods = ['GET'])
