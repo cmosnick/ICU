@@ -49,6 +49,58 @@ function logout(){
 
 }
 
+function populateSettings(data, status)
+{
+	for(var i = 0; i < data.length; i++)
+	{
+		var startTime = data[i].start_time.substring(0, data[i].start_time.length - 3);
+		var endTime = data[i].end_time.substring(0, data[i].end_time.length - 3);
+		var notifyBy = data[i].notification_option_id;
+		var startAMorPM = 0, endAMorPM = 0;
+		
+		if(parseInt(startTime.substring(0,2), 10) > 12)
+		{
+			startAMorPM = 1;
+			var time24 = parseInt(startTime.substring(0,2), 10);
+			time24 = time24 - 12;
+			startTime = time24.toString() + startTime.substring(2,startTime.length);
+		}
+		
+		if(parseInt(endTime.substring(0,2), 10) > 12)
+		{
+			endAMorPM = 1;
+			var time24 = parseInt(endTime.substring(0,2), 10);
+			time24 = time24 - 12;
+			endTime = time24.toString() + endTime.substring(2,endTime.length);
+		}
+		
+		if(startTime.charAt(0) == 0){
+			startTime = startTime.substring(1, startTime.length);
+		}
+		if(endTime.charAt(0) == 0){
+			endTime = endTime.substring(1, endTime.length);
+		}
+		
+		writeTime(startTime, startAMorPM, endTime, endAMorPM, notifyBy);
+	}
+	
+	function writeTime(startTime, startAMorPM, endTime, endAMorPM, notifyBy)
+	{	
+		console.log("S: " + startTime + " " + startAMorPM);
+		console.log("E: " + endTime + " " + endAMorPM);
+		console.log("N: " + notifyBy + "\n");
+		$("#notificationContainer").css("visibility", "visible");
+		$("#notificationContainer").append('<div class="loadHtml margin30"></div>');
+		$(".loadHtml:last").load("notification.html", function(){
+			$(this).children('#startTime').val(startTime);
+			$(this).children('#startTimeAMPM').prop('selectedIndex', startAMorPM);
+			$(this).children('#endTime').val(endTime);
+			$(this).children('#endTimeAMPM').prop('selectedIndex', endAMorPM);
+			$(this).children('#notify').prop('selectedIndex', notifyBy - 1);
+		});			
+	}
+};
+
 function signUp()
 {
 	$.post("http://icu.services:5000/user/add/",
