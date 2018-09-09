@@ -1,9 +1,9 @@
 # ICU
-####I see you
+#### I see you
 
 Home security application.  Includes source code for raspberry pi, API, server, and front end.
 
-###To set up dev environment on your machine
+### To set up dev environment on your machine
 1. [Install vagrant](https://www.vagrantup.com/docs/installation/) on your machine.
 2. Inside of git repo, start vagrant box:
 > vagrant up
@@ -27,14 +27,14 @@ To update your VM, use this command:
 This command is the same as you would enter manually if you were ssh'd into the box itself.  Be sure to include all the setup steps necessary so others can easily update their environemnts as well.  After that, push up the updated `bootstrap.sh` file so we can all have ruby too!
 
 
-####Some useful commands to know:
+#### Some useful commands to know:
 * `vagrant up` starts the vagrant box
 * `vagrant destroy`... destroys it
 * `vagrant reload` restarts the box, but does not re-run the bootstrap.sh file
 * `vagrant reload --provision` restarts the box and re-runs the bootstrap.sh file, because it is set as the provisioning file
 * `vagrant ssh` allows you to ssh into the box and work inside of it
 
-###To export database and commit to git:
+### To export database and commit to git:
 * Naviagte to database directory
 * `./export_database`
 * Commit to git
