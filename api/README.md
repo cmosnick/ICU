@@ -1,6 +1,6 @@
-#API Documentation
+# API Documentation
 
-###Contents
+### Contents
 * [Users](#user-routes)
 * [Notifications](#notification-settings-routes)
 * [User Settings](#user-settings-routes)
@@ -11,7 +11,7 @@
 
 
 
-##User Routes
+## User Routes
 
 * __/user/id/\<int:user_id\>__
   * GET user info by user_id
@@ -107,7 +107,7 @@
  ```
 
 
-##Notification Settings Routes
+## Notification Settings Routes
 
 * __/notification_options/\<int:not_id\>__
  * GET notification settings by notification id
@@ -123,7 +123,7 @@
 ```
 
 
-##User Settings Routes
+## User Settings Routes
 
 * __/user_settings/setting/\<int:setting_id\>__
  * GET user settings based on setting id.  I don't see a practical application for this
@@ -144,7 +144,7 @@
 
 
 
-##Image Routes
+## Image Routes
 
 * __/image/info/id/\<int:image_id\>__
  * GET image info (metadata, not actual image) by image id
@@ -202,7 +202,7 @@
 will send raw image
 ```
 
-##Authentication
+## Authentication
 
 * __/user/login/__
  * POST login info with:
